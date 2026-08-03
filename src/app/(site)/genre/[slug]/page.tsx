@@ -36,7 +36,7 @@ export async function generateMetadata({
   if (!category) return {};
 
   return {
-    title: `${category.title} — ArtikelSaya`,
+    title: `${category.title} — Everlasting`,
     description:
       category.description ?? `Kumpulan artikel genre ${category.title}.`,
   };
@@ -70,7 +70,7 @@ export default async function GenreDetailPage({
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
           <Link
             href="/genre"
-            className="text-sm font-semibold text-neutral-400 hover:text-rose-600"
+            className="text-sm font-semibold text-neutral-400 hover:text-brand-700"
           >
             &larr; Semua genre
           </Link>

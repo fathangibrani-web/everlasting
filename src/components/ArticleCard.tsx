@@ -33,7 +33,7 @@ export default function ArticleCard({ post }: { post: PostCard }) {
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-5">
-        <h3 className="line-clamp-2 text-lg font-bold leading-snug transition-colors group-hover:text-rose-600">
+        <h3 className="line-clamp-2 text-lg font-bold leading-snug transition-colors group-hover:text-brand-700">
           {post.title}
         </h3>
         {post.excerpt && (
@@ -43,7 +43,7 @@ export default function ArticleCard({ post }: { post: PostCard }) {
         )}
         <div className="mt-2 flex items-center justify-between text-xs text-neutral-400">
           <span>{formatDate(post.publishedAt)}</span>
-          <span className="flex items-center gap-1 font-semibold text-rose-600 opacity-0 transition-opacity group-hover:opacity-100">
+          <span className="flex items-center gap-1 font-semibold text-brand-700 opacity-0 transition-opacity group-hover:opacity-100">
             Baca
             <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
               <path

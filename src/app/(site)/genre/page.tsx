@@ -9,7 +9,7 @@ import type { Category } from "@/sanity/lib/types";
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: "Genre Artikel — ArtikelSaya",
+  title: "Genre Artikel — Everlasting",
   description: "Jelajahi artikel berdasarkan genre / kategori.",
 };
 
@@ -31,7 +31,7 @@ export default async function GenrePage() {
       {categories.length === 0 ? (
         <p className="mt-12 text-center text-neutral-500">
           Belum ada genre. Buat lewat{" "}
-          <Link href="/studio" className="font-semibold text-rose-600 hover:underline">
+          <Link href="/studio" className="font-semibold text-brand-700 hover:underline">
             Studio
           </Link>
           .
@@ -50,7 +50,7 @@ export default async function GenrePage() {
                   className={`absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br opacity-20 blur-2xl ${colors.gradient} transition-opacity group-hover:opacity-40`}
                 />
                 <div className="relative flex items-start justify-between">
-                  <h2 className="text-xl font-bold transition-colors group-hover:text-rose-600">
+                  <h2 className="text-xl font-bold transition-colors group-hover:text-brand-700">
                     {cat.title}
                   </h2>
                   <span
@@ -64,7 +64,7 @@ export default async function GenrePage() {
                     {cat.description}
                   </p>
                 )}
-                <span className="relative mt-4 flex items-center gap-1 text-sm font-semibold text-rose-600">
+                <span className="relative mt-4 flex items-center gap-1 text-sm font-semibold text-brand-700">
                   Lihat artikel
                   <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L11.29 6.15a.75.75 0 111.08-1.04l4.5 4.5a.75.75 0 010 1.04l-4.5 4.5a.75.75 0 11-1.08-1.04l3.098-3.1H3.75A.75.75 0 013 10z" clipRule="evenodd" />

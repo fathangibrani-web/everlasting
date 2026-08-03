@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafaf9;
-  --foreground: #171717;
-  --card: #ffffff;
-  --border: #e7e5e4;
+  --background: #faf3e7;
+  --foreground: #3b2a1c;
+  --card: #fffdf9;
+  --border: #e6d7bd;
 }
 
 @theme inline {
@@ -14,14 +14,26 @@
   --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-playfair);
+
+  --color-brand-50: #fbf3e1;
+  --color-brand-100: #f3e1bb;
+  --color-brand-200: #e9cb8d;
+  --color-brand-300: #ddb05c;
+  --color-brand-400: #ce9b3e;
+  --color-brand-500: #bc8a2e;
+  --color-brand-600: #a67623;
+  --color-brand-700: #8a5f1b;
+  --color-brand-800: #6e4b16;
+  --color-brand-900: #543910;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --card: #141414;
-    --border: #262626;
+    --background: #1c140d;
+    --foreground: #f3e6d0;
+    --card: #241a10;
+    --border: #3a2a1a;
   }
 }
 
@@ -36,8 +48,8 @@ body {
 }
 
 ::selection {
-  background: #fb7185;
-  color: white;
+  background: #a67623;
+  color: #fffdf9;
 }
 
 @keyframes fade-in-up {
@@ -75,14 +87,14 @@ body {
 }
 
 .prose-article blockquote {
-  border-left: 4px solid #fb7185;
+  border-left: 4px solid #a67623;
   padding-left: 1rem;
   font-style: italic;
-  color: #78716c;
+  color: #7a6a57;
 }
 
 .prose-article a {
-  color: #e11d48;
+  color: #8a5f1b;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -105,6 +117,36 @@ body {
 
 .prose-article figcaption {
   font-size: 0.875rem;
-  color: #78716c;
+  color: #7a6a57;
   text-align: center;
+}
+
+/* Page transitions (View Transitions API via React's <ViewTransition>) */
+::view-transition-old(.page-exit) {
+  animation: page-fade-out 150ms ease-in both;
+}
+::view-transition-new(.page-enter) {
+  animation: page-fade-in 240ms ease-out 100ms both;
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }

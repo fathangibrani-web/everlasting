@@ -66,5 +66,5 @@ export function getColorClasses(color?: string): ColorClasses {
   if (color && color in colorMap) {
     return colorMap[color as AccentColor];
   }
-  return colorMap.rose;
+  return colorMap.amber;
 }

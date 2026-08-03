@@ -18,14 +18,8 @@ export const allPostsQuery = groq`
   }
 `;
 
-export const featuredPostQuery = groq`
-  *[_type == "post" && featured == true] | order(publishedAt desc)[0] {
-    ${postCardFields}
-  }
-`;
-
-export const latestPostsQuery = groq`
-  *[_type == "post" && !(featured == true && _id == $featuredId)] | order(publishedAt desc) [0...12] {
+export const featuredPostsQuery = groq`
+  *[_type == "post" && featured == true] | order(publishedAt desc) [0...8] {
     ${postCardFields}
   }
 `;

@@ -40,7 +40,7 @@ export async function generateMetadata({
   if (!post) return {};
 
   return {
-    title: `${post.title} — ArtikelSaya`,
+    title: `${post.title} — Everlasting`,
     description: post.excerpt,
   };
 }
@@ -131,7 +131,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-rose-300 hover:text-rose-600"
+                className="rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-brand-300 hover:text-brand-700"
               >
                 {s.platform}
               </a>

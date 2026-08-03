@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { ViewTransition } from "react";
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -19,10 +20,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "ArtikelSaya — Berita & Cerita Pilihan",
+  title: "Everlasting — Mindset, Intelek, Islamik",
   description:
-    "Blog artikel bergambar seputar berita, teknologi, olahraga, hiburan, dan opini.",
+    "Kumpulan artikel bergambar seputar mindset, intelektual, dan wawasan Islami.",
 };
 
 export default async function RootLayout({
@@ -35,11 +41,15 @@ export default async function RootLayout({
   return (
     <html
       lang="id"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <Navbar categories={categories} />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <ViewTransition enter="page-enter" exit="page-exit">
+            {children}
+          </ViewTransition>
+        </main>
         <Footer />
       </body>
     </html>

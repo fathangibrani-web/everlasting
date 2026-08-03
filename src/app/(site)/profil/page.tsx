@@ -12,8 +12,8 @@ import type { PostCard, Profile } from "@/sanity/lib/types";
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: "Profil — ArtikelSaya",
-  description: "Kenali penulis di balik ArtikelSaya.",
+  title: "Profil — Everlasting",
+  description: "Kenali penulis di balik Everlasting.",
 };
 
 const socialIcon: Record<string, string> = {
@@ -36,7 +36,7 @@ export default async function ProfilPage() {
   if (!profile) {
     return (
       <div className="mx-auto flex max-w-lg flex-col items-center gap-4 px-4 py-24 text-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-100 text-3xl dark:bg-rose-500/10">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-100 text-3xl dark:bg-brand-500/10">
           👤
         </div>
         <h1 className="text-xl font-bold">Profil belum diisi</h1>
@@ -46,7 +46,7 @@ export default async function ProfilPage() {
         </p>
         <Link
           href="/studio"
-          className="rounded-full bg-rose-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-rose-700"
+          className="rounded-full bg-brand-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-700"
         >
           Buka Studio
         </Link>
@@ -59,7 +59,7 @@ export default async function ProfilPage() {
   return (
     <div>
       <section className="relative overflow-hidden border-b border-[var(--border)]">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-rose-50 to-transparent dark:from-rose-500/10" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-500/10" />
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-5 px-4 py-16 text-center sm:px-6">
           {profile.photo && (
             <div className="relative h-32 w-32 overflow-hidden rounded-full ring-4 ring-white shadow-lg dark:ring-neutral-800">
@@ -77,7 +77,7 @@ export default async function ProfilPage() {
               {profile.name}
             </h1>
             {profile.tagline && (
-              <p className="mt-1 font-medium text-rose-600">
+              <p className="mt-1 font-medium text-brand-700">
                 {profile.tagline}
               </p>
             )}
@@ -91,7 +91,7 @@ export default async function ProfilPage() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] px-4 py-2 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-rose-300 hover:text-rose-600 hover:shadow-md"
+                  className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] px-4 py-2 text-sm font-medium transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:shadow-md"
                 >
                   <span>{socialIcon[s.platform] ?? "🔗"}</span>
                   {s.platform}
@@ -103,7 +103,7 @@ export default async function ProfilPage() {
           {profile.email && (
             <a
               href={`mailto:${profile.email}`}
-              className="text-sm text-neutral-400 hover:text-rose-600"
+              className="text-sm text-neutral-400 hover:text-brand-700"
             >
               {profile.email}
             </a>
@@ -125,7 +125,7 @@ export default async function ProfilPage() {
             </h2>
             <Link
               href="/"
-              className="text-sm font-semibold text-rose-600 hover:underline"
+              className="text-sm font-semibold text-brand-700 hover:underline"
             >
               Lihat semua &rarr;
             </Link>
