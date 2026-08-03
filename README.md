@@ -1,6 +1,6 @@
-# ArtikelSaya
+# Everlasting
 
-Website artikel/berita bergambar, dibangun dengan **Next.js 16** (App Router) + **Sanity** (CMS untuk menulis & upload gambar) + siap deploy ke **Vercel**.
+Website artikel bergambar seputar mindset, intelek, dan wawasan Islami, dibangun dengan **Next.js 16** (App Router) + **Sanity** (CMS untuk menulis & upload gambar) + siap deploy ke **Vercel**.
 
 Fitur:
 
@@ -48,13 +48,12 @@ Fitur:
 
 ## 3. Push ke GitHub
 
+Repo: https://github.com/fathangibrani-web/everlasting
+
 ```bash
-git init
 git add .
-git commit -m "Initial commit: ArtikelSaya website"
-git branch -M main
-git remote add origin <url-repo-github-kamu>
-git push -u origin main
+git commit -m "Pesan commit kamu"
+git push
 ```
 
 ## Struktur penting
