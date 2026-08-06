@@ -60,14 +60,25 @@ export const categoryBySlugQuery = groq`
   }
 `;
 
-export const profileQuery = groq`
-  *[_type == "profile"][0] {
+export const siteInfoQuery = groq`
+  *[_type == "siteInfo"][0] {
+    about,
+    vision,
+    mission
+  }
+`;
+
+export const authorsQuery = groq`
+  *[_type == "author"] | order(name asc) {
+    _id,
     name,
+    slug,
     tagline,
     photo,
     bio,
     email,
-    socials
+    socials,
+    "postCount": count(*[_type == "post" && references(^._id)])
   }
 `;
 

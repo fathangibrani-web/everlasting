@@ -1,4 +1,10 @@
-function Monogram({ size = 36 }: { size?: number }) {
+function Monogram({
+  size = 36,
+  animated = false,
+}: {
+  size?: number;
+  animated?: boolean;
+}) {
   return (
     <svg
       width={size}
@@ -6,7 +12,7 @@ function Monogram({ size = 36 }: { size?: number }) {
       viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0"
+      className={`shrink-0 ${animated ? "logo-glow" : ""}`}
     >
       <circle cx="20" cy="20" r="19" stroke="#a67623" strokeWidth="1.5" />
       <circle cx="20" cy="20" r="15.5" stroke="#a67623" strokeWidth="0.75" opacity="0.5" />
@@ -16,6 +22,15 @@ function Monogram({ size = 36 }: { size?: number }) {
         strokeWidth="2"
         strokeLinecap="round"
       />
+      {animated && (
+        <circle
+          cx="20"
+          cy="1.5"
+          r="1.6"
+          fill="#e9cb8d"
+          className="logo-orbit-dot"
+        />
+      )}
     </svg>
   );
 }
@@ -23,8 +38,22 @@ function Monogram({ size = 36 }: { size?: number }) {
 export default function Logo({
   variant = "navbar",
 }: {
-  variant?: "navbar" | "footer";
+  variant?: "navbar" | "footer" | "hero";
 }) {
+  if (variant === "hero") {
+    return (
+      <div className="flex flex-col items-center gap-3">
+        <Monogram size={88} animated />
+        <span className="logo-shimmer-text font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+          Everlasting
+        </span>
+        <span className="text-xs font-medium uppercase tracking-[0.3em] text-brand-600">
+          Mindset &middot; Intelek &middot; Islamik
+        </span>
+      </div>
+    );
+  }
+
   if (variant === "footer") {
     return (
       <div className="flex flex-col items-center gap-2">

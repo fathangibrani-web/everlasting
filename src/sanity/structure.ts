@@ -12,10 +12,14 @@ export const structure: StructureResolver = (S) =>
         .title("Genre / Kategori")
         .schemaType("category")
         .child(S.documentTypeList("category").title("Genre / Kategori")),
+      S.listItem()
+        .title("Penulis")
+        .schemaType("author")
+        .child(S.documentTypeList("author").title("Penulis")),
       S.divider(),
       S.listItem()
-        .title("Profil Saya")
+        .title("Tentang Everlasting")
         .child(
-          S.document().schemaType("profile").documentId("siteProfile")
+          S.document().schemaType("siteInfo").documentId("siteInfo")
         ),
     ]);

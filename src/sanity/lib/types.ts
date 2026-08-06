@@ -40,11 +40,20 @@ export type Category = {
   postCount: number;
 };
 
-export type Profile = {
+export type Author = {
+  _id: string;
   name: string;
+  slug: { current: string };
   tagline?: string;
   photo?: Image;
   bio?: PortableTextBlock[];
   email?: string;
   socials?: { platform: string; url: string }[];
+  postCount: number;
+};
+
+export type SiteInfo = {
+  about?: PortableTextBlock[];
+  vision?: string;
+  mission?: string[];
 };

@@ -45,7 +45,7 @@ export const post = defineType({
       name: "author",
       title: "Penulis",
       type: "reference",
-      to: [{ type: "profile" }],
+      to: [{ type: "author" }],
     }),
     defineField({
       name: "excerpt",
