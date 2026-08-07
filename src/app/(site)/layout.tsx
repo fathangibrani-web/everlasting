@@ -26,7 +26,7 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Everlasting — Mindset, Intelek, Islamik",
+  title: "Everlasting — Mindset, Intelek, Islami",
   description:
     "Kumpulan artikel bergambar seputar mindset, intelektual, dan wawasan Islami.",
 };

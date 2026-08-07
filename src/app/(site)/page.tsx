@@ -25,7 +25,7 @@ export default async function Home() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 via-[var(--background)] to-transparent dark:from-brand-500/10 dark:via-transparent" />
         <div className="mx-auto max-w-6xl px-4 pb-10 pt-16 text-center sm:px-6 sm:pt-24">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 text-xs font-semibold text-brand-700 dark:border-brand-500/30 dark:bg-brand-500/10">
-            ✦ Mindset &middot; Intelek &middot; Islamik
+            ✦ Mindset &middot; Intelek &middot; Islami
           </span>
           <h1 className="mx-auto mt-6 max-w-2xl font-display text-4xl font-semibold tracking-tight sm:text-5xl">
             Everlasting

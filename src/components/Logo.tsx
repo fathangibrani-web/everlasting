@@ -48,7 +48,7 @@ export default function Logo({
           Everlasting
         </span>
         <span className="text-xs font-medium uppercase tracking-[0.3em] text-brand-600">
-          Mindset &middot; Intelek &middot; Islamik
+          Mindset &middot; Intelek &middot; Islami
         </span>
       </div>
     );
@@ -62,7 +62,7 @@ export default function Logo({
           Everlasting
         </span>
         <span className="text-xs font-medium uppercase tracking-[0.25em] text-brand-600">
-          Mindset &middot; Intelek &middot; Islamik
+          Mindset &middot; Intelek &middot; Islami
         </span>
       </div>
     );
@@ -76,7 +76,7 @@ export default function Logo({
           Everlasting
         </span>
         <span className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.2em] text-brand-600">
-          Mindset &middot; Intelek &middot; Islamik
+          Mindset &middot; Intelek &middot; Islami
         </span>
       </span>
     </span>
