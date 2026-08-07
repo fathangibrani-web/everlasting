@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { getColorClasses } from "@/lib/colors";
-import { formatDate } from "@/lib/format";
+import { capitalizeFirst, formatDate } from "@/lib/format";
 import { urlForImage } from "@/sanity/lib/image";
 import type { PostCard } from "@/sanity/lib/types";
 
@@ -164,7 +164,7 @@ function Slide({ post }: { post: PostCard }) {
         </h2>
         {post.excerpt && (
           <p className="line-clamp-3 text-neutral-500 dark:text-neutral-400">
-            {post.excerpt}
+            {capitalizeFirst(post.excerpt)}
           </p>
         )}
         <div className="flex items-center gap-2 text-sm text-neutral-400">

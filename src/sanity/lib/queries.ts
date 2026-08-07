@@ -9,7 +9,8 @@ export const postCardFields = groq`
   publishedAt,
   featured,
   "category": category->{title, slug, color},
-  "author": author->{name, photo}
+  "author": author->{name, photo},
+  "plainBody": pt::text(body)
 `;
 
 export const allPostsQuery = groq`

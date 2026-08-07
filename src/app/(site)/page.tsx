@@ -56,11 +56,7 @@ export default async function Home() {
               </Link>
             </div>
 
-            {gridPosts.length === 0 ? (
-              <p className="mt-6 text-neutral-500">
-                Belum ada artikel lain. Tambahkan lebih banyak lewat Studio.
-              </p>
-            ) : (
+            {gridPosts.length > 0 && (
               <div className="mt-6 grid grid-cols-1 gap-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
                 {gridPosts.map((post) => (
                   <ArticleCard key={post._id} post={post} />

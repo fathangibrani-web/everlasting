@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { getColorClasses } from "@/lib/colors";
-import { formatDate } from "@/lib/format";
+import { capitalizeFirst, formatDate, getReadingTime } from "@/lib/format";
 import { urlForImage } from "@/sanity/lib/image";
 import type { PostCard } from "@/sanity/lib/types";
 
 export default function ArticleCard({ post }: { post: PostCard }) {
   const colors = getColorClasses(post.category?.color);
+  const readingTime = getReadingTime(post.plainBody);
 
   return (
     <Link
@@ -38,11 +39,15 @@ export default function ArticleCard({ post }: { post: PostCard }) {
         </h3>
         {post.excerpt && (
           <p className="line-clamp-2 flex-1 text-sm text-neutral-500 dark:text-neutral-400">
-            {post.excerpt}
+            {capitalizeFirst(post.excerpt)}
           </p>
         )}
         <div className="mt-2 flex items-center justify-between text-xs text-neutral-400">
-          <span>{formatDate(post.publishedAt)}</span>
+          <span>
+            {formatDate(post.publishedAt)}
+            <span className="mx-1.5">&middot;</span>
+            {readingTime} menit baca
+          </span>
           <span className="flex items-center gap-1 font-semibold text-brand-700 opacity-0 transition-opacity group-hover:opacity-100">
             Baca
             <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">

@@ -24,6 +24,7 @@ export type PostCard = {
   featured?: boolean;
   category: CategoryRef;
   author?: AuthorRef;
+  plainBody?: string;
 };
 
 export type PostDetail = Omit<PostCard, "author"> & {
