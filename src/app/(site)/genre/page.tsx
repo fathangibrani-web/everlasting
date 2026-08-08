@@ -13,6 +13,7 @@ export const revalidate = 30;
 export const metadata: Metadata = {
   title: "Genre Artikel — Everlasting",
   description: "Jelajahi artikel berdasarkan genre / kategori.",
+  alternates: { canonical: "/genre" },
 };
 
 export default async function GenrePage() {

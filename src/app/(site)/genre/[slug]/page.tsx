@@ -41,6 +41,9 @@ export async function generateMetadata({
     title: `${category.title} — Everlasting`,
     description:
       category.description ?? `Kumpulan artikel genre ${category.title}.`,
+    alternates: {
+      canonical: `/genre/${slug}`,
+    },
   };
 }
 

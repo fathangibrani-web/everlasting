@@ -42,9 +42,35 @@ export async function generateMetadata({
 
   if (!post) return {};
 
+  const title = `${post.title} — Everlasting`;
+
   return {
-    title: `${post.title} — Everlasting`,
+    title,
     description: post.excerpt,
+    alternates: {
+      canonical: `/artikel/${slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title,
+      description: post.excerpt,
+      publishedTime: post.publishedAt,
+      images: post.mainImage
+        ? [
+            {
+              url: urlForImage(post.mainImage).width(1200).height(630).url(),
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: post.excerpt,
+    },
   };
 }
 

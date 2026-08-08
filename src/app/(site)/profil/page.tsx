@@ -20,6 +20,7 @@ export const revalidate = 30;
 export const metadata: Metadata = {
   title: "Profil — Everlasting",
   description: "Kenali Everlasting: visi, misi, dan para penulis di baliknya.",
+  alternates: { canonical: "/profil" },
 };
 
 export default async function ProfilPage() {

@@ -5,6 +5,7 @@ import { ViewTransition } from "react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { SITE_URL } from "@/lib/site";
 import { allCategoriesQuery } from "@/sanity/lib/queries";
 import { safeFetch } from "@/sanity/lib/safeFetch";
 import type { Category } from "@/sanity/lib/types";
@@ -26,10 +27,44 @@ const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
 });
 
+const title = "Everlasting — Mindset, Intelek, Islami";
+const description =
+  "Kumpulan artikel bergambar seputar mindset, intelektual, dan wawasan Islami.";
+
 export const metadata: Metadata = {
-  title: "Everlasting — Mindset, Intelek, Islami",
-  description:
-    "Kumpulan artikel bergambar seputar mindset, intelektual, dan wawasan Islami.",
+  metadataBase: new URL(SITE_URL),
+  title,
+  description,
+  keywords: [
+    "Everlasting",
+    "mindset",
+    "intelek",
+    "islami",
+    "artikel islami",
+    "blog islami",
+    "refleksi",
+    "opini",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: SITE_URL,
+    siteName: "Everlasting",
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default async function RootLayout({
