@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import ArticleCard from "@/components/ArticleCard";
+import Reveal from "@/components/Reveal";
+import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
 import { getColorClasses } from "@/lib/colors";
 import {
   categoryBySlugQuery,
@@ -67,7 +69,7 @@ export default async function GenreDetailPage({
         <div
           className={`absolute inset-0 -z-10 bg-gradient-to-br opacity-10 ${colors.gradient}`}
         />
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <Reveal className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
           <Link
             href="/genre"
             className="text-sm font-semibold text-neutral-400 hover:text-brand-700"
@@ -87,7 +89,7 @@ export default async function GenreDetailPage({
               {category.description}
             </p>
           )}
-        </div>
+        </Reveal>
       </section>
 
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -96,11 +98,13 @@ export default async function GenreDetailPage({
             Belum ada artikel di genre ini.
           </p>
         ) : (
-          <div className="grid grid-cols-1 gap-6 pb-12 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerGrid className="grid grid-cols-1 gap-6 pb-12 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
-              <ArticleCard key={post._id} post={post} />
+              <StaggerItem key={post._id}>
+                <ArticleCard post={post} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         )}
       </div>
     </div>

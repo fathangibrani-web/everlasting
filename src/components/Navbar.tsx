@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,6 +16,7 @@ export default function Navbar({ categories }: { categories: Category[] }) {
   const [genreOpen, setGenreOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -31,6 +33,13 @@ export default function Navbar({ categories }: { categories: Category[] }) {
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  const dropdownTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { duration: 0.18, ease: [0.16, 1, 0.3, 1] as const };
+  const menuTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { duration: 0.25, ease: [0.16, 1, 0.3, 1] as const };
 
   return (
     <header
@@ -87,29 +96,37 @@ export default function Navbar({ categories }: { categories: Category[] }) {
               </svg>
             </Link>
 
-            {genreOpen && (
-              <div className="absolute left-0 top-full w-64 pt-2">
-                <div className="animate-fade-in-up overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-xl">
-                  {categories.length === 0 && (
-                    <p className="px-3 py-2 text-sm text-neutral-500">
-                      Belum ada genre.
-                    </p>
-                  )}
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat._id}
-                      href={`/genre/${cat.slug.current}`}
-                      className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-neutral-700 transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-neutral-300 dark:hover:bg-brand-500/10"
-                    >
-                      {cat.title}
-                      <span className="text-xs text-neutral-400">
-                        {cat.postCount}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+            <AnimatePresence>
+              {genreOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                  transition={dropdownTransition}
+                  className="absolute left-0 top-full w-64 pt-2"
+                >
+                  <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-xl">
+                    {categories.length === 0 && (
+                      <p className="px-3 py-2 text-sm text-neutral-500">
+                        Belum ada genre.
+                      </p>
+                    )}
+                    {categories.map((cat) => (
+                      <Link
+                        key={cat._id}
+                        href={`/genre/${cat.slug.current}`}
+                        className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-neutral-700 transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-neutral-300 dark:hover:bg-brand-500/10"
+                      >
+                        {cat.title}
+                        <span className="text-xs text-neutral-400">
+                          {cat.postCount}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           <Link
@@ -139,28 +156,38 @@ export default function Navbar({ categories }: { categories: Category[] }) {
         </button>
       </nav>
 
-      {open && (
-        <div className="animate-fade-in-up border-t border-[var(--border)] bg-[var(--card)] px-4 py-3 md:hidden">
-          <Link href="/" className="block rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
-            Home
-          </Link>
-          <p className="mt-2 px-3 text-xs font-semibold uppercase tracking-wide text-neutral-400">
-            Genre Artikel
-          </p>
-          {categories.map((cat) => (
-            <Link
-              key={cat._id}
-              href={`/genre/${cat.slug.current}`}
-              className="block rounded-lg px-3 py-2 text-sm hover:bg-brand-50 dark:hover:bg-brand-500/10"
-            >
-              {cat.title}
-            </Link>
-          ))}
-          <Link href="/profil" className="mt-2 block rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
-            Profil
-          </Link>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={menuTransition}
+            className="overflow-hidden border-t border-[var(--border)] bg-[var(--card)] md:hidden"
+          >
+            <div className="px-4 py-3">
+              <Link href="/" className="block rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
+                Home
+              </Link>
+              <p className="mt-2 px-3 text-xs font-semibold uppercase tracking-wide text-neutral-400">
+                Genre Artikel
+              </p>
+              {categories.map((cat) => (
+                <Link
+                  key={cat._id}
+                  href={`/genre/${cat.slug.current}`}
+                  className="block rounded-lg px-3 py-2 text-sm hover:bg-brand-50 dark:hover:bg-brand-500/10"
+                >
+                  {cat.title}
+                </Link>
+              ))}
+              <Link href="/profil" className="mt-2 block rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
+                Profil
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

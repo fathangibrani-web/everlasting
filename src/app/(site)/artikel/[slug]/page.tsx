@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 
 import ArticleCard from "@/components/ArticleCard";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
+import Reveal from "@/components/Reveal";
+import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
 import { getColorClasses } from "@/lib/colors";
 import { formatDate } from "@/lib/format";
 import { urlForImage } from "@/sanity/lib/image";
@@ -67,7 +69,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
 
   return (
     <article>
-      <div className="mx-auto max-w-3xl px-4 pt-10 sm:px-6">
+      <Reveal className="mx-auto max-w-3xl px-4 pt-10 sm:px-6">
         <Link
           href={`/genre/${post.category.slug.current}`}
           className={`inline-block w-fit rounded-full px-3 py-1 text-xs font-semibold ${colors.badge}`}
@@ -96,7 +98,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
             <p className="text-neutral-400">{formatDate(post.publishedAt)}</p>
           </div>
         </div>
-      </div>
+      </Reveal>
 
       {post.mainImage && (
         <div className="relative mx-auto mt-8 aspect-[16/9] w-full max-w-4xl overflow-hidden rounded-2xl px-0 sm:px-6">
@@ -145,11 +147,13 @@ export default async function ArticlePage({ params }: { params: Params }) {
           <h2 className="text-xl font-bold tracking-tight">
             Artikel Terkait
           </h2>
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerGrid className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((p) => (
-              <ArticleCard key={p._id} post={p} />
+              <StaggerItem key={p._id}>
+                <ArticleCard post={p} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         </div>
       )}
     </article>

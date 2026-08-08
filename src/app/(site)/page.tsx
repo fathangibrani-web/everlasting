@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import ArticleCard from "@/components/ArticleCard";
 import FeaturedCarousel from "@/components/FeaturedCarousel";
+import Reveal from "@/components/Reveal";
+import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
 import { allPostsQuery, featuredPostsQuery } from "@/sanity/lib/queries";
 import { safeFetch } from "@/sanity/lib/safeFetch";
 import type { PostCard } from "@/sanity/lib/types";
@@ -23,7 +25,7 @@ export default async function Home() {
     <div>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 via-[var(--background)] to-transparent dark:from-brand-500/10 dark:via-transparent" />
-        <div className="mx-auto max-w-6xl px-4 pb-10 pt-16 text-center sm:px-6 sm:pt-24">
+        <Reveal className="mx-auto max-w-6xl px-4 pb-10 pt-16 text-center sm:px-6 sm:pt-24">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 text-xs font-semibold text-brand-700 dark:border-brand-500/30 dark:bg-brand-500/10">
             ✦ Mindset &middot; Intelek &middot; Islami
           </span>
@@ -34,7 +36,7 @@ export default async function Home() {
             Kumpulan tulisan seputar cara berpikir, wawasan intelektual, dan
             nilai-nilai Islami — lengkap dengan foto dan cerita di baliknya.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -42,7 +44,9 @@ export default async function Home() {
           <EmptyState />
         ) : (
           <>
-            <FeaturedCarousel posts={carouselPosts} />
+            <Reveal delay={100}>
+              <FeaturedCarousel posts={carouselPosts} />
+            </Reveal>
 
             <div className="mt-16 flex items-center justify-between">
               <h2 className="text-2xl font-bold tracking-tight">
@@ -57,11 +61,13 @@ export default async function Home() {
             </div>
 
             {gridPosts.length > 0 && (
-              <div className="mt-6 grid grid-cols-1 gap-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
+              <StaggerGrid className="mt-6 grid grid-cols-1 gap-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
                 {gridPosts.map((post) => (
-                  <ArticleCard key={post._id} post={post} />
+                  <StaggerItem key={post._id}>
+                    <ArticleCard post={post} />
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerGrid>
             )}
           </>
         )}

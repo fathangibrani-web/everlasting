@@ -6,6 +6,7 @@ import AuthorCard from "@/components/AuthorCard";
 import Logo from "@/components/Logo";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
 import Reveal from "@/components/Reveal";
+import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
 import {
   allPostsQuery,
   authorsQuery,
@@ -36,9 +37,9 @@ export default async function ProfilPage() {
     <div>
       <section className="relative overflow-hidden border-b border-[var(--border)]">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-500/10" />
-        <div className="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
+        <Reveal className="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
           <Logo variant="hero" />
-        </div>
+        </Reveal>
       </section>
 
       <Reveal className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
@@ -117,11 +118,13 @@ export default async function ProfilPage() {
             &rarr; Penulis.
           </p>
         ) : (
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerGrid className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {authors.map((author) => (
-              <AuthorCard key={author._id} author={author} />
+              <StaggerItem key={author._id}>
+                <AuthorCard author={author} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         )}
       </Reveal>
 
@@ -138,11 +141,13 @@ export default async function ProfilPage() {
               Lihat semua &rarr;
             </Link>
           </div>
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerGrid className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {recentPosts.map((post) => (
-              <ArticleCard key={post._id} post={post} />
+              <StaggerItem key={post._id}>
+                <ArticleCard post={post} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         </Reveal>
       )}
     </div>
