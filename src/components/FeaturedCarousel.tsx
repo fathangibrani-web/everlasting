@@ -60,7 +60,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
 
   return (
     <div
-      className="group/carousel relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-sm"
+      className="glass group/carousel relative overflow-hidden rounded-3xl border shadow-sm"
       ref={containerRef}
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}

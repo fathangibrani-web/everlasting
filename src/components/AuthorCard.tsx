@@ -1,22 +1,12 @@
 import Image from "next/image";
 
+import SocialIcon from "@/components/SocialIcon";
 import { urlForImage } from "@/sanity/lib/image";
 import type { Author } from "@/sanity/lib/types";
 
-const socialIcon: Record<string, string> = {
-  Instagram: "📷",
-  "Twitter / X": "🐦",
-  GitHub: "💻",
-  LinkedIn: "💼",
-  YouTube: "▶️",
-  TikTok: "🎵",
-  Facebook: "📘",
-  Website: "🌐",
-};
-
 export default function AuthorCard({ author }: { author: Author }) {
   return (
-    <div className="group flex flex-col items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="glass group flex flex-col items-center gap-3 rounded-2xl border p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {author.photo && (
         <div className="relative h-24 w-24 overflow-hidden rounded-full ring-4 ring-brand-100 transition-all group-hover:ring-brand-300 dark:ring-brand-500/20">
           <Image
@@ -43,9 +33,9 @@ export default function AuthorCard({ author }: { author: Author }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.platform}
-              className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border)] text-sm transition-colors hover:border-brand-300 hover:bg-brand-50"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] text-neutral-600 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:shadow-sm dark:text-neutral-300"
             >
-              {socialIcon[s.platform] ?? "🔗"}
+              <SocialIcon platform={s.platform} className="h-4 w-4" />
             </a>
           ))}
         </div>

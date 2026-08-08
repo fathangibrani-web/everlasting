@@ -43,10 +43,8 @@ export default function Navbar({ categories }: { categories: Category[] }) {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all ${
-        scrolled
-          ? "bg-[var(--card)]/85 backdrop-blur-md border-b border-[var(--border)] shadow-sm"
-          : "bg-transparent border-b border-transparent"
+      className={`sticky top-0 z-50 border-b transition-all ${
+        scrolled ? "glass shadow-sm" : "border-transparent bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
@@ -105,7 +103,7 @@ export default function Navbar({ categories }: { categories: Category[] }) {
                   transition={dropdownTransition}
                   className="absolute left-0 top-full w-64 pt-2"
                 >
-                  <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-xl">
+                  <div className="glass-strong overflow-hidden rounded-2xl border p-2 shadow-xl">
                     {categories.length === 0 && (
                       <p className="px-3 py-2 text-sm text-neutral-500">
                         Belum ada genre.
@@ -163,7 +161,7 @@ export default function Navbar({ categories }: { categories: Category[] }) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={menuTransition}
-            className="overflow-hidden border-t border-[var(--border)] bg-[var(--card)] md:hidden"
+            className="glass-strong overflow-hidden border-t md:hidden"
           >
             <div className="px-4 py-3">
               <Link href="/" className="block rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">

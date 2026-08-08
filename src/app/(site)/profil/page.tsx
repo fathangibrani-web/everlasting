@@ -36,7 +36,6 @@ export default async function ProfilPage() {
   return (
     <div>
       <section className="relative overflow-hidden border-b border-[var(--border)]">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-500/10" />
         <Reveal className="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
           <Logo variant="hero" />
         </Reveal>
@@ -67,7 +66,7 @@ export default async function ProfilPage() {
         {hasVisionOrMission && (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {siteInfo?.vision && (
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+              <div className="glass rounded-2xl border p-6">
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
                   Visi
                 </h2>
@@ -77,7 +76,7 @@ export default async function ProfilPage() {
               </div>
             )}
             {siteInfo?.mission && siteInfo.mission.length > 0 && (
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+              <div className="glass rounded-2xl border p-6">
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
                   Misi
                 </h2>

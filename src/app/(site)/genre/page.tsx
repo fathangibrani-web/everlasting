@@ -46,7 +46,7 @@ export default async function GenrePage() {
               <StaggerItem key={cat._id} className="h-full">
                 <Link
                   href={`/genre/${cat.slug.current}`}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  className="glass group relative flex h-full flex-col overflow-hidden rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div
                     className={`absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br opacity-20 blur-2xl ${colors.gradient} transition-opacity group-hover:opacity-40`}

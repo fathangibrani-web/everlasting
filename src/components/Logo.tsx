@@ -1,4 +1,4 @@
-function Monogram({
+export function Monogram({
   size = 36,
   animated = false,
 }: {

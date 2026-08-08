@@ -13,7 +13,7 @@ export default function ArticleCard({ post }: { post: PostCard }) {
   return (
     <Link
       href={`/artikel/${post.slug.current}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      className="glass group flex flex-col overflow-hidden rounded-2xl border shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
         {post.mainImage && (

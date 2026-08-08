@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import ArticleCard from "@/components/ArticleCard";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
 import Reveal from "@/components/Reveal";
+import SocialIcon from "@/components/SocialIcon";
 import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
 import { getColorClasses } from "@/lib/colors";
 import { formatDate } from "@/lib/format";
@@ -133,8 +134,9 @@ export default async function ArticlePage({ params }: { params: Params }) {
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-brand-300 hover:text-brand-700"
+                className="flex items-center gap-1.5 rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium transition-colors hover:border-brand-300 hover:text-brand-700"
               >
+                <SocialIcon platform={s.platform} className="h-3.5 w-3.5" />
                 {s.platform}
               </a>
             ))}

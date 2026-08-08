@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import ArticleCard from "@/components/ArticleCard";
 import FeaturedCarousel from "@/components/FeaturedCarousel";
+import { Monogram } from "@/components/Logo";
 import Reveal from "@/components/Reveal";
 import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
 import { allPostsQuery, featuredPostsQuery } from "@/sanity/lib/queries";
@@ -24,12 +25,14 @@ export default async function Home() {
   return (
     <div>
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-50 via-[var(--background)] to-transparent dark:from-brand-500/10 dark:via-transparent" />
         <Reveal className="mx-auto max-w-6xl px-4 pb-10 pt-16 text-center sm:px-6 sm:pt-24">
-          <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 text-xs font-semibold text-brand-700 dark:border-brand-500/30 dark:bg-brand-500/10">
+          <div className="flex justify-center">
+            <Monogram size={72} animated />
+          </div>
+          <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 text-xs font-semibold text-brand-700 dark:border-brand-500/30 dark:bg-brand-500/10">
             ✦ Mindset &middot; Intelek &middot; Islami
           </span>
-          <h1 className="mx-auto mt-6 max-w-2xl font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h1 className="logo-shimmer-text mx-auto mt-6 max-w-2xl font-display text-4xl font-semibold tracking-tight sm:text-5xl">
             Everlasting
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-neutral-500 dark:text-neutral-400">
@@ -78,7 +81,7 @@ export default async function Home() {
 
 function EmptyState() {
   return (
-    <div className="mx-auto flex max-w-lg flex-col items-center gap-4 py-24 text-center">
+    <div className="glass mx-auto flex max-w-lg flex-col items-center gap-4 rounded-3xl border px-8 py-16 text-center">
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-100 text-3xl dark:bg-brand-500/10">
         📝
       </div>

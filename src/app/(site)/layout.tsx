@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { ViewTransition } from "react";
 
+import AnimatedBackground from "@/components/AnimatedBackground";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { allCategoriesQuery } from "@/sanity/lib/queries";
@@ -44,13 +45,16 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <Navbar categories={categories} />
-        <main className="flex-1">
-          <ViewTransition enter="page-enter" exit="page-exit">
-            {children}
-          </ViewTransition>
-        </main>
-        <Footer />
+        <AnimatedBackground />
+        <div className="relative z-10 flex min-h-full flex-1 flex-col">
+          <Navbar categories={categories} />
+          <main className="flex-1">
+            <ViewTransition enter="page-enter" exit="page-exit">
+              {children}
+            </ViewTransition>
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
