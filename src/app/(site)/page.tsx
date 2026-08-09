@@ -119,7 +119,7 @@ function EmptyState() {
         📝
       </div>
       <h2 className="text-xl font-bold">Belum ada artikel</h2>
-      <p className="text-neutral-500">
+      <p className="text-[var(--on-glass-soft)]">
         Buka Sanity Studio untuk mulai menulis artikel pertamamu, lengkap dengan
         gambar dan kategori.
       </p>

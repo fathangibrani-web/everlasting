@@ -20,10 +20,10 @@ export default function AuthorCard({ author }: { author: Author }) {
       <div>
         <h3 className="font-bold">{author.name}</h3>
         {author.tagline && (
-          <p className="text-sm text-brand-700">{author.tagline}</p>
+          <p className="text-sm text-[var(--on-glass-accent)]">{author.tagline}</p>
         )}
       </div>
-      <p className="text-xs text-neutral-400">{author.postCount} artikel</p>
+      <p className="text-xs text-[var(--on-glass-soft)]">{author.postCount} artikel</p>
       {author.socials && author.socials.length > 0 && (
         <div className="flex flex-wrap justify-center gap-1.5">
           {author.socials.map((s) => (
@@ -33,7 +33,7 @@ export default function AuthorCard({ author }: { author: Author }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.platform}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-neutral-600 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:shadow-sm dark:text-neutral-300"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--on-glass-soft)] transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-[var(--on-glass-accent)] hover:shadow-sm"
             >
               <SocialIcon platform={s.platform} className="h-4 w-4" />
             </a>

@@ -53,7 +53,7 @@ export default async function GenrePage() {
                     className={`absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br opacity-20 blur-2xl ${colors.gradient} transition-opacity group-hover:opacity-40`}
                   />
                   <div className="relative flex items-start justify-between">
-                    <h2 className="text-xl font-bold transition-colors group-hover:text-brand-700">
+                    <h2 className="text-xl font-bold transition-colors group-hover:text-[var(--on-glass-accent)]">
                       {cat.title}
                     </h2>
                     <span
@@ -63,11 +63,11 @@ export default async function GenrePage() {
                     </span>
                   </div>
                   {cat.description && (
-                    <p className="relative mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+                    <p className="relative mt-2 text-sm text-[var(--on-glass-soft)]">
                       {cat.description}
                     </p>
                   )}
-                  <span className="relative mt-4 flex items-center gap-1 text-sm font-semibold text-brand-700">
+                  <span className="relative mt-4 flex items-center gap-1 text-sm font-semibold text-[var(--on-glass-accent)]">
                     Lihat artikel
                     <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L11.29 6.15a.75.75 0 111.08-1.04l4.5 4.5a.75.75 0 010 1.04l-4.5 4.5a.75.75 0 11-1.08-1.04l3.098-3.1H3.75A.75.75 0 013 10z" clipRule="evenodd" />

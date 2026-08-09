@@ -68,26 +68,26 @@ export default async function ProfilPage() {
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {siteInfo?.vision && (
               <div className="glass rounded-2xl border p-6">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--on-glass-accent)]">
                   Visi
                 </h2>
-                <p className="mt-3 text-neutral-600 dark:text-neutral-300">
+                <p className="mt-3 text-[var(--on-glass-soft)]">
                   {siteInfo.vision}
                 </p>
               </div>
             )}
             {siteInfo?.mission && siteInfo.mission.length > 0 && (
               <div className="glass rounded-2xl border p-6">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--on-glass-accent)]">
                   Misi
                 </h2>
                 <ul className="mt-3 space-y-2">
                   {siteInfo.mission.map((point, i) => (
                     <li
                       key={i}
-                      className="flex gap-2 text-sm text-neutral-600 dark:text-neutral-300"
+                      className="flex gap-2 text-sm text-[var(--on-glass-soft)]"
                     >
-                      <span className="text-brand-600">&#10022;</span>
+                      <span className="text-[var(--on-glass-accent)]">&#10022;</span>
                       {point}
                     </li>
                   ))}

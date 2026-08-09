@@ -270,10 +270,10 @@ export default async function ArticlePage({ params }: { params: Params }) {
                   {nextReadPost.category.title}
                 </span>
               )}
-              <h2 className="text-xl font-bold leading-snug tracking-tight transition-colors group-hover:text-brand-700 sm:text-2xl">
+              <h2 className="text-xl font-bold leading-snug tracking-tight transition-colors group-hover:text-[var(--on-glass-accent)] sm:text-2xl">
                 {nextReadPost.title}
               </h2>
-              <span className="flex items-center gap-1 text-sm font-semibold text-brand-700">
+              <span className="flex items-center gap-1 text-sm font-semibold text-[var(--on-glass-accent)]">
                 Baca artikel
                 <svg
                   className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"

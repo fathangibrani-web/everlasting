@@ -97,7 +97,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
             type="button"
             aria-label="Sebelumnya"
             onClick={() => goTo(index - 1)}
-            className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-brand-700 opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-brand-50 group-hover/carousel:opacity-100"
+            className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-[var(--on-glass-accent)] opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-white/10 group-hover/carousel:opacity-100"
           >
             ‹
           </button>
@@ -105,7 +105,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
             type="button"
             aria-label="Berikutnya"
             onClick={() => goTo(index + 1)}
-            className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-brand-700 opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-brand-50 group-hover/carousel:opacity-100"
+            className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-[var(--on-glass-accent)] opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-white/10 group-hover/carousel:opacity-100"
           >
             ›
           </button>
@@ -164,14 +164,14 @@ function Slide({ post, isActive }: { post: PostCard; isActive: boolean }) {
           {post.title}
         </h2>
         {post.excerpt && (
-          <p className="line-clamp-3 text-neutral-500 dark:text-neutral-400">
+          <p className="line-clamp-3 text-[var(--on-glass-soft)]">
             {capitalizeFirst(post.excerpt)}
           </p>
         )}
-        <div className="flex items-center gap-2 text-sm text-neutral-400">
+        <div className="flex items-center gap-2 text-sm text-[var(--on-glass-soft)]">
           <span>{formatDate(post.publishedAt)}</span>
           <span>&middot;</span>
-          <span className="font-semibold text-brand-700">Baca selengkapnya</span>
+          <span className="font-semibold text-[var(--on-glass-accent)]">Baca selengkapnya</span>
         </div>
       </div>
     </Link>

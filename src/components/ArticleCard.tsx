@@ -34,16 +34,16 @@ export default function ArticleCard({ post }: { post: PostCard }) {
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-5">
-        <h3 className="line-clamp-2 text-lg font-bold leading-snug transition-colors group-hover:text-brand-700">
+        <h3 className="line-clamp-2 text-lg font-bold leading-snug transition-colors group-hover:text-[var(--on-glass-accent)]">
           {post.title}
         </h3>
         {post.excerpt && (
-          <p className="line-clamp-2 flex-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="line-clamp-2 flex-1 text-sm text-[var(--on-glass-soft)]">
             {capitalizeFirst(post.excerpt)}
           </p>
         )}
         {post.author?.name && (
-          <div className="flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[var(--on-glass-soft)]">
             {post.author.photo && (
               <span className="relative h-4 w-4 shrink-0 overflow-hidden rounded-full">
                 <Image
@@ -57,13 +57,13 @@ export default function ArticleCard({ post }: { post: PostCard }) {
             {post.author.name}
           </div>
         )}
-        <div className="mt-2 flex items-center justify-between text-xs text-neutral-400">
+        <div className="mt-2 flex items-center justify-between text-xs text-[var(--on-glass-soft)]">
           <span>
             {formatDate(post.publishedAt)}
             <span className="mx-1.5">&middot;</span>
             {readingTime} menit baca
           </span>
-          <span className="flex items-center gap-1 font-semibold text-brand-700 opacity-0 transition-opacity group-hover:opacity-100">
+          <span className="flex items-center gap-1 font-semibold text-[var(--on-glass-accent)] opacity-0 transition-opacity group-hover:opacity-100">
             Baca
             <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
               <path
