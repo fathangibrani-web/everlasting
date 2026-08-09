@@ -16,27 +16,36 @@
 */
 
 :root {
-  /* Bright cream/peach base — fixed regardless of system light/dark
-     preference, so the page never slides into an all-dark look. */
+  /* Light mode: bright cream/peach base, dark brown text. */
   --background: #fbf1e6;
   --foreground: #3b2a1c;
 
-  /* Liquid-glass surfaces: brown blending into navy, gold-edged —
-     also fixed across light/dark mode. The floating cards read
-     distinctly darker than the bright base. */
+  /* Liquid-glass surfaces: flat brown, gold-edged — fixed across
+     light/dark mode, this is the site's signature card treatment.
+     Navy stays out of the cards; it only appears as a background
+     accent (see .aurora-blob-3) and as the dark-mode base below. */
   --card: #6e3115;
   --card-rgb: 110, 49, 21;
-  --card-navy-rgb: 30, 54, 83;
   --card-strong-rgb: 79, 33, 13;
   --border: #a67623;
   --border-rgb: 166, 118, 35;
   --glass-shadow-rgb: 7, 21, 36;
 
-  /* Text sitting on top of the dark glass surfaces. */
+  /* Text sitting on top of the brown glass surfaces — stays fixed too. */
   --on-glass: #f5e6d3;
   --on-glass-rgb: 245, 230, 211;
   --on-glass-soft: rgba(245, 230, 211, 0.72);
   --on-glass-accent: #ddb05c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode: deep navy base (not brown) so it stays distinct from
+       the brown glass cards instead of blending into one dark mush.
+       Text flips to light cream. */
+    --background: #071524;
+    --foreground: #f3e6d0;
+  }
 }
 
 @theme inline {
@@ -268,14 +277,19 @@ body {
 
 /* Decorative background — organic soft-color blooms across the full
    palette (peach + light brown dominant, navy as a quiet third accent),
-   plus a thin SVG wave layer (see AnimatedBackground.tsx). Fixed
-   regardless of system light/dark mode — the base always stays bright. */
+   plus a thin SVG wave layer (see AnimatedBackground.tsx). */
 .aurora-blob {
   position: absolute;
   display: block;
   filter: blur(90px);
   opacity: 0.5;
   will-change: transform;
+}
+
+@media (prefers-color-scheme: dark) {
+  .aurora-blob {
+    opacity: 0.3;
+  }
 }
 
 .aurora-blob-1 {
@@ -366,17 +380,19 @@ body {
   backdrop-filter: blur(28px);
 }
 
-/* Liquid glass surface — brown blending into navy, with a thin gold
-   edge and a cool-shadow undertone for depth: the floating cards read
-   clearly darker than the bright base. Pair with a Tailwind
-   border-width utility (e.g. `border`, `border-b`) to show the edge.
-   Text inside should use text-on-glass / text-on-glass-accent. */
+@media (prefers-color-scheme: dark) {
+  .frosted-base {
+    background: rgba(30, 54, 83, 0.28);
+  }
+}
+
+/* Liquid glass surface — flat brown with a thin gold edge and a
+   cool-shadow undertone for depth: the floating cards read clearly
+   darker than the base in both light and dark mode. Pair with a
+   Tailwind border-width utility (e.g. `border`, `border-b`) to show
+   the edge. Text inside should use text-on-glass / text-on-glass-accent. */
 .glass {
-  background: linear-gradient(
-    155deg,
-    rgba(var(--card-rgb), 0.8),
-    rgba(var(--card-navy-rgb), 0.8)
-  );
+  background: rgba(var(--card-rgb), 0.8);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   backdrop-filter: blur(20px) saturate(140%);
   border-style: solid;
@@ -386,11 +402,7 @@ body {
 }
 
 .glass-strong {
-  background: linear-gradient(
-    155deg,
-    rgba(var(--card-strong-rgb), 0.94),
-    rgba(var(--card-navy-rgb), 0.94)
-  );
+  background: rgba(var(--card-strong-rgb), 0.94);
   -webkit-backdrop-filter: blur(24px) saturate(140%);
   backdrop-filter: blur(24px) saturate(140%);
   border-style: solid;
