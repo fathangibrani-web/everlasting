@@ -29,7 +29,7 @@ const playfairDisplay = Playfair_Display({
 
 const title = "Everlasting — Mindset, Intelek, Islami";
 const description =
-  "Kumpulan artikel bergambar seputar mindset, intelektual, dan wawasan Islami.";
+  "“Iman tanpa mikir itu rapuh. Mikir tanpa arah itu kosong.”";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -90,7 +90,7 @@ export default async function RootLayout({
           Lewati ke konten
         </a>
         <AnimatedBackground />
-        <div className="relative z-10 flex min-h-full flex-1 flex-col">
+        <div className="frosted-base relative z-10 flex min-h-full flex-1 flex-col">
           <Navbar categories={categories} searchPosts={searchPosts} />
           <main id="main-content" className="flex-1">
             <ViewTransition enter="page-enter" exit="page-exit">

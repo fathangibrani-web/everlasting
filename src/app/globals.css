@@ -260,41 +260,61 @@ body {
   }
 }
 
-/* Animated aurora background */
+/* Decorative background — organic soft-color blooms, only the two
+   brand tones (#F0D4BF peach, #864C2C brown). Kept to two shapes plus
+   a thin SVG wave layer (see AnimatedBackground.tsx) to stay uncrowded. */
 .aurora-blob {
   position: absolute;
   display: block;
-  border-radius: 9999px;
   filter: blur(90px);
-  opacity: 0.4;
+  opacity: 0.45;
   will-change: transform;
 }
 
 .aurora-blob-1 {
   top: -15%;
   left: -12%;
-  width: 42vw;
-  height: 42vw;
-  background: radial-gradient(circle, #e9cb8d, transparent 70%);
-  animation: aurora-float-1 26s ease-in-out infinite;
+  width: 44vw;
+  height: 44vw;
+  border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+  background: radial-gradient(circle, #f0d4bf, transparent 72%);
+  animation: aurora-float-1 28s ease-in-out infinite;
 }
 
 .aurora-blob-2 {
   bottom: -18%;
   right: -12%;
-  width: 46vw;
-  height: 46vw;
-  background: radial-gradient(circle, #a67623, transparent 70%);
-  animation: aurora-float-2 32s ease-in-out infinite;
+  width: 48vw;
+  height: 48vw;
+  border-radius: 58% 42% 35% 65% / 55% 60% 40% 45%;
+  background: radial-gradient(circle, #864c2c, transparent 72%);
+  animation: aurora-float-2 34s ease-in-out infinite;
 }
 
-.aurora-blob-3 {
-  top: 25%;
-  right: 15%;
-  width: 30vw;
-  height: 30vw;
-  background: radial-gradient(circle, #ddb05c, transparent 70%);
-  animation: aurora-float-3 22s ease-in-out infinite;
+/* Faint tiled dot texture for the "textured, patterned" feel. */
+.texture-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(134, 76, 44, 0.14) 1px,
+    transparent 1px
+  );
+  background-size: 26px 26px;
+  opacity: 0.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .aurora-blob {
+    opacity: 0.2;
+  }
+  .texture-dots {
+    background-image: radial-gradient(
+      circle,
+      rgba(240, 212, 191, 0.12) 1px,
+      transparent 1px
+    );
+  }
 }
 
 @keyframes aurora-float-1 {
@@ -317,25 +337,23 @@ body {
   }
 }
 
-@keyframes aurora-float-3 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-5vw, 5vh) scale(0.9);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .aurora-blob {
-    opacity: 0.22;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .aurora-blob {
     animation: none;
+  }
+}
+
+/* Frosted-glass page base — sits above the decorative pattern so the
+   pattern reads softly through it, without touching any card/nav styling. */
+.frosted-base {
+  background: rgba(240, 212, 191, 0.22);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .frosted-base {
+    background: rgba(134, 76, 44, 0.16);
   }
 }
 
