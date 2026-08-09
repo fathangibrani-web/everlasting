@@ -37,7 +37,6 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
     didDrag.current = false;
     paused.current = true;
     startX.current = e.clientX;
-    e.currentTarget.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {

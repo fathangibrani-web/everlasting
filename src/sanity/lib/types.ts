@@ -61,6 +61,7 @@ export type AuthorIndexEntry = {
   name: string;
   slug: string;
   tagline?: string;
+  bio?: string;
   photo?: Image;
   socials?: { platform: string; url: string }[];
   posts: { title: string; slug: string }[];

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import ArticleCard from "@/components/ArticleCard";
 import AuthorCard from "@/components/AuthorCard";
+import AuthorHoverCard from "@/components/AuthorHoverCard";
 import Logo from "@/components/Logo";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
 import Reveal from "@/components/Reveal";
@@ -120,8 +121,14 @@ export default async function ProfilPage() {
         ) : (
           <StaggerGrid className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {authors.map((author) => (
-              <StaggerItem key={author._id}>
-                <AuthorCard author={author} />
+              <StaggerItem key={author._id} className="h-full">
+                <AuthorHoverCard
+                  authorSlug={author.slug.current}
+                  large
+                  triggerClassName="flex h-full w-full"
+                >
+                  <AuthorCard author={author} />
+                </AuthorHoverCard>
               </StaggerItem>
             ))}
           </StaggerGrid>

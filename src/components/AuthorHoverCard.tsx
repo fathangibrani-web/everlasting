@@ -12,9 +12,13 @@ import { urlForImage } from "@/sanity/lib/image";
 
 export default function AuthorHoverCard({
   authorSlug,
+  large = false,
+  triggerClassName = "inline-flex",
   children,
 }: {
   authorSlug?: string;
+  large?: boolean;
+  triggerClassName?: string;
   children: React.ReactNode;
 }) {
   const authors = useAuthorsIndex();
@@ -29,6 +33,10 @@ export default function AuthorHoverCard({
 
   if (!author) return <>{children}</>;
 
+  const cardWidth = large ? 380 : 288;
+  const photoSize = large ? "h-20 w-20" : "h-12 w-12";
+  const photoPx = large ? 160 : 96;
+
   const clearTimers = () => {
     if (showTimer.current) clearTimeout(showTimer.current);
     if (hideTimer.current) clearTimeout(hideTimer.current);
@@ -39,7 +47,6 @@ export default function AuthorHoverCard({
     showTimer.current = setTimeout(() => {
       const rect = triggerRef.current?.getBoundingClientRect();
       if (rect) {
-        const cardWidth = 288;
         setCoords({
           top: rect.bottom + window.scrollY + 8,
           left: Math.min(
@@ -60,7 +67,7 @@ export default function AuthorHoverCard({
   return (
     <span
       ref={triggerRef}
-      className="inline-flex"
+      className={triggerClassName}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
     >
@@ -90,17 +97,19 @@ export default function AuthorHoverCard({
                   top: coords.top,
                   left: coords.left,
                   zIndex: 200,
-                  width: 288,
+                  width: cardWidth,
                 }}
-                className="glass-strong rounded-2xl border p-4 shadow-2xl"
+                className={`glass-strong rounded-2xl border shadow-2xl ${large ? "p-6" : "p-4"}`}
                 onMouseEnter={clearTimers}
                 onMouseLeave={handleLeave}
               >
                 <div className="flex items-center gap-3">
                   {author.photo && (
-                    <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full">
+                    <span
+                      className={`relative ${photoSize} shrink-0 overflow-hidden rounded-full`}
+                    >
                       <Image
-                        src={urlForImage(author.photo).width(96).height(96).url()}
+                        src={urlForImage(author.photo).width(photoPx).height(photoPx).url()}
                         alt=""
                         fill
                         className="object-cover"
@@ -108,44 +117,63 @@ export default function AuthorHoverCard({
                     </span>
                   )}
                   <div>
-                    <p className="font-semibold text-[var(--on-glass)]">
+                    <p
+                      className={`font-semibold text-[var(--on-glass)] ${large ? "text-lg" : ""}`}
+                    >
                       {author.name}
                     </p>
                     {author.tagline && (
-                      <p className="text-xs text-[var(--on-glass-accent)]">
+                      <p
+                        className={`text-[var(--on-glass-accent)] ${large ? "text-sm" : "text-xs"}`}
+                      >
                         {author.tagline}
                       </p>
                     )}
                   </div>
                 </div>
 
+                {large && author.bio && (
+                  <p className="mt-4 text-sm leading-relaxed text-[var(--on-glass-soft)]">
+                    {author.bio}
+                  </p>
+                )}
+
                 {author.socials && author.socials.length > 0 && (
-                  <div className="mt-3 flex gap-1.5">
+                  <div className={`flex gap-1.5 ${large ? "mt-4" : "mt-3"}`}>
                     {author.socials.map((s) => (
                       <a
                         key={s.platform}
                         href={s.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border)] text-[var(--on-glass-soft)] transition-colors hover:text-[var(--on-glass-accent)]"
+                        className={`flex items-center justify-center rounded-full border border-[var(--border)] text-[var(--on-glass-soft)] transition-colors hover:text-[var(--on-glass-accent)] ${
+                          large ? "h-9 w-9" : "h-7 w-7"
+                        }`}
                       >
-                        <SocialIcon platform={s.platform} className="h-3.5 w-3.5" />
+                        <SocialIcon
+                          platform={s.platform}
+                          className={large ? "h-4 w-4" : "h-3.5 w-3.5"}
+                        />
                       </a>
                     ))}
                   </div>
                 )}
 
                 {author.posts.length > 0 && (
-                  <div className="mt-3 border-t border-[var(--border)]/40 pt-3">
+                  <div
+                    className={`border-t border-[var(--border)]/40 ${large ? "mt-4 pt-4" : "mt-3 pt-3"}`}
+                  >
                     <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--on-glass-soft)]">
-                      Tulisan lainnya
+                      {large ? "Karya lainnya" : "Tulisan lainnya"}
                     </p>
-                    <ul className="mt-1.5 space-y-1">
-                      {author.posts.slice(0, 4).map((p) => (
+                    <ul className={large ? "mt-2 space-y-1.5" : "mt-1.5 space-y-1"}>
+                      {author.posts.slice(0, large ? 6 : 4).map((p) => (
                         <li key={p.slug}>
                           <Link
                             href={`/artikel/${p.slug}`}
-                            className="line-clamp-1 block text-xs text-[var(--on-glass)] transition-colors hover:text-[var(--on-glass-accent)]"
+                            className={`line-clamp-1 block text-[var(--on-glass)] transition-colors hover:text-[var(--on-glass-accent)] ${
+                              large ? "text-sm" : "text-xs"
+                            }`}
                           >
                             {p.title}
                           </Link>

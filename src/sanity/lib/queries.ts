@@ -94,6 +94,7 @@ export const authorsIndexQuery = groq`
     name,
     "slug": slug.current,
     tagline,
+    "bio": pt::text(bio),
     photo,
     socials,
     "posts": *[_type == "post" && references(^._id)] | order(publishedAt desc) [0...6] {
