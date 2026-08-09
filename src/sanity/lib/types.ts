@@ -19,7 +19,7 @@ export type PostCard = {
   title: string;
   slug: { current: string };
   excerpt?: string;
-  mainImage: Image;
+  mainImage: Image & { alt?: string };
   publishedAt: string;
   featured?: boolean;
   category: CategoryRef;
@@ -30,6 +30,8 @@ export type PostCard = {
 export type PostDetail = Omit<PostCard, "author"> & {
   body: PortableTextBlock[];
   author?: AuthorRef;
+  deck?: string;
+  nextRead?: PostCard | null;
 };
 
 export type Category = {

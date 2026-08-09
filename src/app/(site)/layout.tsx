@@ -80,10 +80,16 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-full focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Lewati ke konten
+        </a>
         <AnimatedBackground />
         <div className="relative z-10 flex min-h-full flex-1 flex-col">
           <Navbar categories={categories} />
-          <main className="flex-1">
+          <main id="main-content" className="flex-1">
             <ViewTransition enter="page-enter" exit="page-exit">
               {children}
             </ViewTransition>

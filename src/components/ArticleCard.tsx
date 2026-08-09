@@ -19,7 +19,7 @@ export default function ArticleCard({ post }: { post: PostCard }) {
         {post.mainImage && (
           <Image
             src={urlForImage(post.mainImage).width(600).height(375).url()}
-            alt={post.title}
+            alt={post.mainImage.alt || post.title}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"

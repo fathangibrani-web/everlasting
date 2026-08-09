@@ -30,11 +30,16 @@ export const postBySlugQuery = groq`
     _id,
     title,
     excerpt,
+    deck,
     mainImage,
     body,
+    "plainBody": pt::text(body),
     publishedAt,
     "category": category->{title, slug, color},
-    "author": author->{name, tagline, photo, socials}
+    "author": author->{name, tagline, photo, socials},
+    "nextRead": nextRead->{
+      ${postCardFields}
+    }
   }
 `;
 

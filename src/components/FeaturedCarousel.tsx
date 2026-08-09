@@ -84,9 +84,9 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
           }
         }}
       >
-        {posts.map((post) => (
+        {posts.map((post, i) => (
           <div key={post._id} className="w-full shrink-0">
-            <Slide post={post} />
+            <Slide post={post} isActive={i === index} />
           </div>
         ))}
       </div>
@@ -129,7 +129,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
   );
 }
 
-function Slide({ post }: { post: PostCard }) {
+function Slide({ post, isActive }: { post: PostCard; isActive: boolean }) {
   const colors = getColorClasses(post.category?.color);
 
   return (
@@ -142,10 +142,11 @@ function Slide({ post }: { post: PostCard }) {
         {post.mainImage && (
           <Image
             src={urlForImage(post.mainImage).width(900).height(600).url()}
-            alt={post.title}
+            alt={post.mainImage.alt || post.title}
             fill
             draggable={false}
-            priority
+            priority={isActive}
+            loading={isActive ? undefined : "lazy"}
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"
           />

@@ -56,6 +56,15 @@ export const post = defineType({
       validation: (rule) => rule.max(220),
     }),
     defineField({
+      name: "deck",
+      title: "Deck (subjudul)",
+      type: "text",
+      rows: 2,
+      description:
+        "Satu kalimat di bawah judul, di halaman artikel. Kalau kosong, pakai Ringkasan.",
+      validation: (rule) => rule.max(160),
+    }),
+    defineField({
       name: "publishedAt",
       title: "Tanggal Terbit",
       type: "datetime",
@@ -72,6 +81,14 @@ export const post = defineType({
       name: "body",
       title: "Isi Artikel",
       type: "blockContent",
+    }),
+    defineField({
+      name: "nextRead",
+      title: "Baca Berikutnya (opsional)",
+      type: "reference",
+      to: [{ type: "post" }],
+      description:
+        "Artikel yang disarankan setelah ini. Kalau kosong, sistem pilih otomatis dari genre yang sama.",
     }),
   ],
   preview: {

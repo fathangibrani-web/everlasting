@@ -35,9 +35,8 @@ export default async function Home() {
           <h1 className="logo-shimmer-text mx-auto mt-6 max-w-2xl font-display text-4xl font-semibold tracking-tight sm:text-5xl">
             Everlasting
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-neutral-500 dark:text-neutral-400">
-            Kumpulan tulisan seputar cara berpikir, wawasan intelektual, dan
-            nilai-nilai Islami — lengkap dengan foto dan cerita di baliknya.
+          <p className="mx-auto mt-5 max-w-xl text-xl font-medium leading-snug text-neutral-700 dark:text-neutral-200">
+            Iman tanpa mikir itu rapuh. Mikir tanpa arah itu kosong.
           </p>
         </Reveal>
       </section>
