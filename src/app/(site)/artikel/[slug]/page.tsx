@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 
 import ArticleCard from "@/components/ArticleCard";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
+import ReadingProgressBar from "@/components/ReadingProgressBar";
 import Reveal from "@/components/Reveal";
 import ShareRow from "@/components/ShareRow";
 import SocialIcon from "@/components/SocialIcon";
@@ -132,6 +133,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
 
   return (
     <article>
+      <ReadingProgressBar targetId="article-body" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -205,7 +207,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
         </div>
       )}
 
-      <div className="mx-auto max-w-[680px] px-4 pb-10 pt-8 sm:px-6">
+      <div id="article-body" className="mx-auto max-w-[680px] px-4 pb-10 pt-8 sm:px-6">
         {post.body ? (
           <PortableTextRenderer value={post.body} />
         ) : (

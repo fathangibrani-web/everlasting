@@ -4,6 +4,9 @@ import { PortableText, type PortableTextComponents } from "next-sanity";
 import { urlForImage } from "@/sanity/lib/image";
 
 const components: PortableTextComponents = {
+  block: {
+    pullquote: ({ children }) => <blockquote className="pullquote">{children}</blockquote>,
+  },
   types: {
     image: ({ value }) => {
       if (!value?.asset) return null;

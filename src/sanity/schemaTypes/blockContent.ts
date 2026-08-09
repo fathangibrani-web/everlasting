@@ -14,6 +14,7 @@ export const blockContent = defineType({
         { title: "H3", value: "h3" },
         { title: "H4", value: "h4" },
         { title: "Quote", value: "blockquote" },
+        { title: "Kutipan Besar (Pull Quote)", value: "pullquote" },
       ],
       lists: [
         { title: "Bullet", value: "bullet" },

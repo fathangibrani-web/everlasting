@@ -55,6 +55,14 @@ export type Author = {
   postCount: number;
 };
 
+export type SearchPost = {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  category?: { title: string; color?: string };
+};
+
 export type SiteInfo = {
   about?: PortableTextBlock[];
   vision?: string;

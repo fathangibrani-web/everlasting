@@ -88,6 +88,16 @@ export const authorsQuery = groq`
   }
 `;
 
+export const searchIndexQuery = groq`
+  *[_type == "post"] | order(publishedAt desc) {
+    _id,
+    title,
+    slug,
+    excerpt,
+    "category": category->{title, color}
+  }
+`;
+
 export const postSlugsQuery = groq`
   *[_type == "post" && defined(slug.current)][].slug.current
 `;

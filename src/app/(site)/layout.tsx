@@ -6,9 +6,9 @@ import AnimatedBackground from "@/components/AnimatedBackground";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { SITE_URL } from "@/lib/site";
-import { allCategoriesQuery } from "@/sanity/lib/queries";
+import { allCategoriesQuery, searchIndexQuery } from "@/sanity/lib/queries";
 import { safeFetch } from "@/sanity/lib/safeFetch";
-import type { Category } from "@/sanity/lib/types";
+import type { Category, SearchPost } from "@/sanity/lib/types";
 
 import "../globals.css";
 
@@ -72,7 +72,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await safeFetch<Category[]>(allCategoriesQuery, {}, []);
+  const [categories, searchPosts] = await Promise.all([
+    safeFetch<Category[]>(allCategoriesQuery, {}, []),
+    safeFetch<SearchPost[]>(searchIndexQuery, {}, []),
+  ]);
 
   return (
     <html
@@ -88,7 +91,7 @@ export default async function RootLayout({
         </a>
         <AnimatedBackground />
         <div className="relative z-10 flex min-h-full flex-1 flex-col">
-          <Navbar categories={categories} />
+          <Navbar categories={categories} searchPosts={searchPosts} />
           <main id="main-content" className="flex-1">
             <ViewTransition enter="page-enter" exit="page-exit">
               {children}

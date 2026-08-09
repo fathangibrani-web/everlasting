@@ -91,7 +91,7 @@ export default async function Home() {
             </div>
 
             {gridPosts.length > 0 && (
-              <StaggerGrid className="mt-6 grid grid-cols-1 gap-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
+              <StaggerGrid className="mt-6 grid grid-cols-1 gap-6 pb-16 sm:grid-cols-2 lg:grid-cols-3">
                 {gridPosts.map((post) => (
                   <StaggerItem key={post._id}>
                     <ArticleCard post={post} />
@@ -99,6 +99,12 @@ export default async function Home() {
                 ))}
               </StaggerGrid>
             )}
+
+            <Reveal className="border-t border-[var(--border)] px-4 py-16 text-center sm:px-6">
+              <p className="mx-auto max-w-2xl font-display text-2xl italic leading-snug text-neutral-600 sm:text-3xl dark:text-neutral-300">
+                &ldquo;Bukan buat nambah followers. Buat nambah alasan mikir lebih dalam.&rdquo;
+              </p>
+            </Reveal>
           </>
         )}
       </div>

@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+/*
+  Type scale — the site draws only from Tailwind's default scale below.
+  Don't hand-roll one-off font sizes per component; pick the closest step here.
+
+  text-xs    12px  eyebrows, captions, meta (date · reading time)
+  text-sm    14px  secondary UI text, nav links, card meta
+  text-base  16px  default body text outside .prose-article
+  text-lg    18px  = .prose-article body copy, deck/subtitle
+  text-xl    20px  hero subtitle, section intro
+  text-2xl   24px  card titles, H2 in-article (via .prose-article h2: 1.5em)
+  text-3xl   30px  article H1 (mobile)
+  text-4xl   36px  article H1 (desktop), home hero (mobile)
+  text-5xl   48px  home hero (desktop)
+*/
+
 :root {
   --background: #fdf9f2;
   --foreground: #3b2a1c;
@@ -91,6 +106,40 @@ body {
   padding-left: 1rem;
   font-style: italic;
   color: #7a6a57;
+}
+
+.prose-article .pullquote {
+  margin: 2.25em auto;
+  max-width: 30rem;
+  border: none;
+  padding: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.625rem;
+  line-height: 1.4;
+  color: #8a5f1b;
+}
+
+.prose-article .pullquote::before {
+  content: "\201C";
+  display: block;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: 3rem;
+  line-height: 1;
+  color: #ddb05c;
+  margin-bottom: -0.35rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose-article .pullquote {
+    color: #e9cb8d;
+  }
+  .prose-article .pullquote::before {
+    color: #a67623;
+  }
 }
 
 .prose-article a {
