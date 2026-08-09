@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import ArticleCard from "@/components/ArticleCard";
+import AuthorHoverCard from "@/components/AuthorHoverCard";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
 import ReadingProgressBar from "@/components/ReadingProgressBar";
 import Reveal from "@/components/Reveal";
@@ -169,26 +170,28 @@ export default async function ArticlePage({ params }: { params: Params }) {
         )}
 
         <div className="mt-5 flex items-center gap-3">
-          {post.author?.photo && (
-            <div className="relative h-10 w-10 overflow-hidden rounded-full">
-              <Image
-                src={urlForImage(post.author.photo).width(80).height(80).url()}
-                alt={post.author.name}
-                fill
-                className="object-cover"
-              />
+          <AuthorHoverCard authorSlug={post.author?.slug}>
+            <div className="flex items-center gap-3">
+              {post.author?.photo && (
+                <div className="relative h-10 w-10 overflow-hidden rounded-full">
+                  <Image
+                    src={urlForImage(post.author.photo).width(80).height(80).url()}
+                    alt={post.author.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              {post.author?.name && (
+                <p className="text-sm font-semibold">{post.author.name}</p>
+              )}
             </div>
-          )}
-          <div className="text-sm">
-            {post.author?.name && (
-              <p className="font-semibold">{post.author.name}</p>
-            )}
-            <p className="text-neutral-400">
-              {formatDate(post.publishedAt)}
-              <span className="mx-1.5">&middot;</span>
-              {readingTime} menit baca
-            </p>
-          </div>
+          </AuthorHoverCard>
+          <p className="text-sm text-neutral-400">
+            {formatDate(post.publishedAt)}
+            <span className="mx-1.5">&middot;</span>
+            {readingTime} menit baca
+          </p>
         </div>
 
         <ShareRow title={post.title} />

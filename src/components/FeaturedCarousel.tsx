@@ -43,7 +43,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!dragging) return;
     const delta = e.clientX - startX.current;
-    if (Math.abs(delta) > 5) didDrag.current = true;
+    if (Math.abs(delta) > 12) didDrag.current = true;
     setDragOffset(delta);
   };
 
@@ -117,7 +117,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
                 type="button"
                 aria-label={`Slide ${i + 1}`}
                 onClick={() => goTo(i)}
-                className={`h-1.5 rounded-full transition-all ${
+                className={`h-1.5 rounded-full transition-all hover:bg-brand-600/70 ${
                   i === index ? "w-6 bg-brand-600" : "w-1.5 bg-brand-600/30"
                 }`}
               />

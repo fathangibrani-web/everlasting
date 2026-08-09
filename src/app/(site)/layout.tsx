@@ -3,12 +3,17 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import { ViewTransition } from "react";
 
 import AnimatedBackground from "@/components/AnimatedBackground";
+import { AuthorsIndexProvider } from "@/components/AuthorsIndexContext";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { SITE_URL } from "@/lib/site";
-import { allCategoriesQuery, searchIndexQuery } from "@/sanity/lib/queries";
+import {
+  allCategoriesQuery,
+  authorsIndexQuery,
+  searchIndexQuery,
+} from "@/sanity/lib/queries";
 import { safeFetch } from "@/sanity/lib/safeFetch";
-import type { Category, SearchPost } from "@/sanity/lib/types";
+import type { AuthorIndexEntry, Category, SearchPost } from "@/sanity/lib/types";
 
 import "../globals.css";
 
@@ -72,9 +77,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [categories, searchPosts] = await Promise.all([
+  const [categories, searchPosts, authors] = await Promise.all([
     safeFetch<Category[]>(allCategoriesQuery, {}, []),
     safeFetch<SearchPost[]>(searchIndexQuery, {}, []),
+    safeFetch<AuthorIndexEntry[]>(authorsIndexQuery, {}, []),
   ]);
 
   return (
@@ -90,15 +96,17 @@ export default async function RootLayout({
           Lewati ke konten
         </a>
         <AnimatedBackground />
-        <div className="frosted-base relative z-10 flex min-h-full flex-1 flex-col">
-          <Navbar categories={categories} searchPosts={searchPosts} />
-          <main id="main-content" className="flex-1">
-            <ViewTransition enter="page-enter" exit="page-exit">
-              {children}
-            </ViewTransition>
-          </main>
-          <Footer />
-        </div>
+        <AuthorsIndexProvider authors={authors}>
+          <div className="frosted-base relative z-10 flex min-h-full flex-1 flex-col">
+            <Navbar categories={categories} searchPosts={searchPosts} />
+            <main id="main-content" className="flex-1">
+              <ViewTransition enter="page-enter" exit="page-exit">
+                {children}
+              </ViewTransition>
+            </main>
+            <Footer />
+          </div>
+        </AuthorsIndexProvider>
       </body>
     </html>
   );

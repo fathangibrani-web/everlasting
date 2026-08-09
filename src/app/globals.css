@@ -166,6 +166,11 @@ body {
   color: #8a5f1b;
   text-decoration: underline;
   text-underline-offset: 2px;
+  transition: color 150ms ease;
+}
+
+.prose-article a:hover {
+  color: #a67623;
 }
 
 .prose-article ul {

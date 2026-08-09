@@ -9,7 +9,7 @@ export const postCardFields = groq`
   publishedAt,
   featured,
   "category": category->{title, slug, color},
-  "author": author->{name, photo},
+  "author": author->{name, photo, "slug": slug.current},
   "plainBody": pt::text(body)
 `;
 
@@ -36,7 +36,7 @@ export const postBySlugQuery = groq`
     "plainBody": pt::text(body),
     publishedAt,
     "category": category->{title, slug, color},
-    "author": author->{name, tagline, photo, socials},
+    "author": author->{name, tagline, photo, socials, "slug": slug.current},
     "nextRead": nextRead->{
       ${postCardFields}
     }
@@ -85,6 +85,21 @@ export const authorsQuery = groq`
     email,
     socials,
     "postCount": count(*[_type == "post" && references(^._id)])
+  }
+`;
+
+export const authorsIndexQuery = groq`
+  *[_type == "author"] | order(name asc) {
+    _id,
+    name,
+    "slug": slug.current,
+    tagline,
+    photo,
+    socials,
+    "posts": *[_type == "post" && references(^._id)] | order(publishedAt desc) [0...6] {
+      title,
+      "slug": slug.current
+    }
   }
 `;
 

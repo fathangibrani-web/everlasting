@@ -67,7 +67,7 @@ export default function Navbar({
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-        <Link href="/">
+        <Link href="/" className="transition-opacity duration-200 hover:opacity-80">
           <Logo variant="navbar" scrolled={scrolled} />
         </Link>
 
@@ -152,7 +152,9 @@ export default function Navbar({
           <button
             aria-label="Buka menu"
             onClick={() => setOpen((v) => !v)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] md:hidden"
+            className={`flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] transition-colors md:hidden ${
+              scrolled ? "hover:bg-white/10" : "hover:bg-brand-50 dark:hover:bg-brand-500/10"
+            }`}
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               {open ? (

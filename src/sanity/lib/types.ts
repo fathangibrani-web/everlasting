@@ -9,6 +9,7 @@ export type CategoryRef = {
 
 export type AuthorRef = {
   name: string;
+  slug?: string;
   tagline?: string;
   photo?: Image;
   socials?: { platform: string; url: string }[];
@@ -53,6 +54,16 @@ export type Author = {
   email?: string;
   socials?: { platform: string; url: string }[];
   postCount: number;
+};
+
+export type AuthorIndexEntry = {
+  _id: string;
+  name: string;
+  slug: string;
+  tagline?: string;
+  photo?: Image;
+  socials?: { platform: string; url: string }[];
+  posts: { title: string; slug: string }[];
 };
 
 export type SearchPost = {
