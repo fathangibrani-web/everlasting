@@ -16,19 +16,23 @@
 */
 
 :root {
-  --background: #fdf9f2;
+  /* Bright cream/peach base — fixed regardless of system light/dark
+     preference, so the page never slides into an all-dark look. */
+  --background: #fbf1e6;
   --foreground: #3b2a1c;
 
-  /* Liquid-glass surfaces: dark brown, gold-edged — fixed across
-     light/dark mode, this is the site's signature card treatment now. */
+  /* Liquid-glass surfaces: brown blending into navy, gold-edged —
+     also fixed across light/dark mode. The floating cards read
+     distinctly darker than the bright base. */
   --card: #6e3115;
   --card-rgb: 110, 49, 21;
+  --card-navy-rgb: 30, 54, 83;
   --card-strong-rgb: 79, 33, 13;
   --border: #a67623;
   --border-rgb: 166, 118, 35;
   --glass-shadow-rgb: 7, 21, 36;
 
-  /* Text sitting on top of the dark-brown glass surfaces. */
+  /* Text sitting on top of the dark glass surfaces. */
   --on-glass: #f5e6d3;
   --on-glass-rgb: 245, 230, 211;
   --on-glass-soft: rgba(245, 230, 211, 0.72);
@@ -56,13 +60,6 @@
   --color-brand-700: #8a5f1b;
   --color-brand-800: #6e4b16;
   --color-brand-900: #543910;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #221810;
-    --foreground: #f3e6d0;
-  }
 }
 
 html {
@@ -269,14 +266,15 @@ body {
   }
 }
 
-/* Decorative background — organic soft-color blooms, only the two
-   brand tones (#F0D4BF peach, #864C2C brown). Kept to two shapes plus
-   a thin SVG wave layer (see AnimatedBackground.tsx) to stay uncrowded. */
+/* Decorative background — organic soft-color blooms across the full
+   palette (peach + light brown dominant, navy as a quiet third accent),
+   plus a thin SVG wave layer (see AnimatedBackground.tsx). Fixed
+   regardless of system light/dark mode — the base always stays bright. */
 .aurora-blob {
   position: absolute;
   display: block;
   filter: blur(90px);
-  opacity: 0.45;
+  opacity: 0.5;
   will-change: transform;
 }
 
@@ -300,30 +298,28 @@ body {
   animation: aurora-float-2 34s ease-in-out infinite;
 }
 
-/* Faint tiled dot texture for the "textured, patterned" feel. */
+.aurora-blob-3 {
+  top: 18%;
+  right: 8%;
+  width: 22vw;
+  height: 22vw;
+  border-radius: 50% 50% 40% 60% / 55% 45% 55% 45%;
+  background: radial-gradient(circle, #305b7e, transparent 74%);
+  opacity: 0.28;
+  animation: aurora-float-3 24s ease-in-out infinite;
+}
+
+/* Tiled dot texture for the "textured, patterned" feel. */
 .texture-dots {
   position: absolute;
   inset: 0;
   background-image: radial-gradient(
     circle,
-    rgba(134, 76, 44, 0.14) 1px,
+    rgba(134, 76, 44, 0.2) 1px,
     transparent 1px
   );
-  background-size: 26px 26px;
-  opacity: 0.5;
-}
-
-@media (prefers-color-scheme: dark) {
-  .aurora-blob {
-    opacity: 0.2;
-  }
-  .texture-dots {
-    background-image: radial-gradient(
-      circle,
-      rgba(240, 212, 191, 0.12) 1px,
-      transparent 1px
-    );
-  }
+  background-size: 24px 24px;
+  opacity: 0.6;
 }
 
 @keyframes aurora-float-1 {
@@ -346,6 +342,16 @@ body {
   }
 }
 
+@keyframes aurora-float-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-4vw, 5vh) scale(0.92);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .aurora-blob {
     animation: none;
@@ -360,40 +366,35 @@ body {
   backdrop-filter: blur(28px);
 }
 
-@media (prefers-color-scheme: dark) {
-  .frosted-base {
-    background: rgba(134, 76, 44, 0.16);
-  }
-}
-
-/* Liquid glass surface — dark-brown glass with a thin gold edge and a
-   faint cool-shadow undertone for depth. Pair with a Tailwind
+/* Liquid glass surface — brown blending into navy, with a thin gold
+   edge and a cool-shadow undertone for depth: the floating cards read
+   clearly darker than the bright base. Pair with a Tailwind
    border-width utility (e.g. `border`, `border-b`) to show the edge.
    Text inside should use text-on-glass / text-on-glass-accent. */
 .glass {
   background: linear-gradient(
     155deg,
-    rgba(var(--card-rgb), 0.72),
-    rgba(var(--card-strong-rgb), 0.72)
+    rgba(var(--card-rgb), 0.8),
+    rgba(var(--card-navy-rgb), 0.8)
   );
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   backdrop-filter: blur(20px) saturate(140%);
   border-style: solid;
-  border-color: rgba(var(--border-rgb), 0.45);
-  box-shadow: 0 10px 30px -12px rgba(var(--glass-shadow-rgb), 0.35);
+  border-color: rgba(var(--border-rgb), 0.55);
+  box-shadow: 0 10px 30px -12px rgba(var(--glass-shadow-rgb), 0.4);
   color: var(--on-glass);
 }
 
 .glass-strong {
   background: linear-gradient(
     155deg,
-    rgba(var(--card-strong-rgb), 0.92),
-    rgba(var(--card-strong-rgb), 0.97)
+    rgba(var(--card-strong-rgb), 0.94),
+    rgba(var(--card-navy-rgb), 0.94)
   );
   -webkit-backdrop-filter: blur(24px) saturate(140%);
   backdrop-filter: blur(24px) saturate(140%);
   border-style: solid;
-  border-color: rgba(var(--border-rgb), 0.5);
-  box-shadow: 0 14px 36px -14px rgba(var(--glass-shadow-rgb), 0.45);
+  border-color: rgba(var(--border-rgb), 0.6);
+  box-shadow: 0 14px 36px -14px rgba(var(--glass-shadow-rgb), 0.5);
   color: var(--on-glass);
 }

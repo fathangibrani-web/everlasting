@@ -7,8 +7,9 @@ export default function AnimatedBackground() {
       <span className="texture-dots" />
       <span className="aurora-blob aurora-blob-1" />
       <span className="aurora-blob aurora-blob-2" />
+      <span className="aurora-blob aurora-blob-3" />
       <svg
-        className="absolute inset-0 h-full w-full opacity-[0.35] dark:opacity-[0.22]"
+        className="absolute inset-0 h-full w-full opacity-[0.4]"
         viewBox="0 0 1440 900"
         preserveAspectRatio="xMidYMid slice"
         fill="none"
