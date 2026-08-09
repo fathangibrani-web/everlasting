@@ -5,16 +5,22 @@ import FeaturedCarousel from "@/components/FeaturedCarousel";
 import { Monogram } from "@/components/Logo";
 import Reveal from "@/components/Reveal";
 import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
-import { allPostsQuery, featuredPostsQuery } from "@/sanity/lib/queries";
+import { getColorClasses } from "@/lib/colors";
+import {
+  allCategoriesQuery,
+  allPostsQuery,
+  featuredPostsQuery,
+} from "@/sanity/lib/queries";
 import { safeFetch } from "@/sanity/lib/safeFetch";
-import type { PostCard } from "@/sanity/lib/types";
+import type { Category, PostCard } from "@/sanity/lib/types";
 
 export const revalidate = 30;
 
 export default async function Home() {
-  const [featuredPosts, allPosts] = await Promise.all([
+  const [featuredPosts, allPosts, categories] = await Promise.all([
     safeFetch<PostCard[]>(featuredPostsQuery, {}, []),
     safeFetch<PostCard[]>(allPostsQuery, {}, []),
+    safeFetch<Category[]>(allCategoriesQuery, {}, []),
   ]);
 
   const carouselPosts =
@@ -49,6 +55,28 @@ export default async function Home() {
             <Reveal delay={100}>
               <FeaturedCarousel posts={carouselPosts} />
             </Reveal>
+
+            {categories.length > 0 && (
+              <Reveal delay={150} className="mt-10">
+                <p className="text-xs font-semibold uppercase tracking-[0.15em] text-neutral-400">
+                  Jelajahi Genre
+                </p>
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                  {categories.map((cat) => {
+                    const catColors = getColorClasses(cat.color);
+                    return (
+                      <Link
+                        key={cat._id}
+                        href={`/genre/${cat.slug.current}`}
+                        className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-transform hover:-translate-y-0.5 ${catColors.badge}`}
+                      >
+                        {cat.title}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </Reveal>
+            )}
 
             <div className="mt-16 flex items-center justify-between">
               <h2 className="text-2xl font-bold tracking-tight">

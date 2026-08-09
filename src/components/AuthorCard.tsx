@@ -33,7 +33,7 @@ export default function AuthorCard({ author }: { author: Author }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.platform}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] text-neutral-600 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:shadow-sm dark:text-neutral-300"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-neutral-600 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 hover:shadow-sm dark:text-neutral-300"
             >
               <SocialIcon platform={s.platform} className="h-4 w-4" />
             </a>

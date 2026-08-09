@@ -42,6 +42,21 @@ export default function ArticleCard({ post }: { post: PostCard }) {
             {capitalizeFirst(post.excerpt)}
           </p>
         )}
+        {post.author?.name && (
+          <div className="flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">
+            {post.author.photo && (
+              <span className="relative h-4 w-4 shrink-0 overflow-hidden rounded-full">
+                <Image
+                  src={urlForImage(post.author.photo).width(32).height(32).url()}
+                  alt=""
+                  fill
+                  className="object-cover"
+                />
+              </span>
+            )}
+            {post.author.name}
+          </div>
+        )}
         <div className="mt-2 flex items-center justify-between text-xs text-neutral-400">
           <span>
             {formatDate(post.publishedAt)}

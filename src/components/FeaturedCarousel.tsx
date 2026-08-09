@@ -97,7 +97,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
             type="button"
             aria-label="Sebelumnya"
             onClick={() => goTo(index - 1)}
-            className="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-brand-700 opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-brand-50 group-hover/carousel:opacity-100"
+            className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-brand-700 opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-brand-50 group-hover/carousel:opacity-100"
           >
             ‹
           </button>
@@ -105,7 +105,7 @@ export default function FeaturedCarousel({ posts }: { posts: PostCard[] }) {
             type="button"
             aria-label="Berikutnya"
             onClick={() => goTo(index + 1)}
-            className="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-brand-700 opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-brand-50 group-hover/carousel:opacity-100"
+            className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--card)]/80 text-lg text-brand-700 opacity-0 shadow-md backdrop-blur transition-opacity hover:bg-brand-50 group-hover/carousel:opacity-100"
           >
             ›
           </button>

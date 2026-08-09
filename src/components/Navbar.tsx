@@ -142,7 +142,7 @@ export default function Navbar({ categories }: { categories: Category[] }) {
         <button
           aria-label="Buka menu"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] md:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] md:hidden"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             {open ? (
@@ -164,7 +164,7 @@ export default function Navbar({ categories }: { categories: Category[] }) {
             className="glass-strong overflow-hidden border-t md:hidden"
           >
             <div className="px-4 py-3">
-              <Link href="/" className="block rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
+              <Link href="/" className="flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
                 Home
               </Link>
               <p className="mt-2 px-3 text-xs font-semibold uppercase tracking-wide text-neutral-400">
@@ -174,12 +174,12 @@ export default function Navbar({ categories }: { categories: Category[] }) {
                 <Link
                   key={cat._id}
                   href={`/genre/${cat.slug.current}`}
-                  className="block rounded-lg px-3 py-2 text-sm hover:bg-brand-50 dark:hover:bg-brand-500/10"
+                  className="flex min-h-11 items-center rounded-lg px-3 py-2 text-sm hover:bg-brand-50 dark:hover:bg-brand-500/10"
                 >
                   {cat.title}
                 </Link>
               ))}
-              <Link href="/profil" className="mt-2 block rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
+              <Link href="/profil" className="mt-2 flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-brand-50 dark:hover:bg-brand-500/10">
                 Profil
               </Link>
             </div>
