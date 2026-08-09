@@ -40,10 +40,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark mode: deep navy base (not brown) so it stays distinct from
-       the brown glass cards instead of blending into one dark mush.
-       Text flips to light cream. */
-    --background: #071524;
+    /* Dark mode: light-brown (#864C2C) is still the core tone, fading
+       through a darker brown into just a touch of navy at the tail —
+       blue stays a gradient accent, never the base fill. Text flips
+       to light cream so it reads against every stop of the gradient. */
+    --background: linear-gradient(160deg, #864c2c 0%, #6e3115 55%, #1e3653 100%);
     --foreground: #f3e6d0;
   }
 }
@@ -382,7 +383,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
   .frosted-base {
-    background: rgba(30, 54, 83, 0.28);
+    background: rgba(134, 76, 44, 0.22);
   }
 }
 
