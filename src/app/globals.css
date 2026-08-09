@@ -40,11 +40,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark mode: light-brown (#864C2C) is still the core tone, fading
-       through a darker brown into just a touch of navy at the tail —
-       blue stays a gradient accent, never the base fill. Text flips
-       to light cream so it reads against every stop of the gradient. */
-    --background: linear-gradient(160deg, #864c2c 0%, #6e3115 55%, #1e3653 100%);
+    /* Dark mode: a soft mesh gradient (overlapping radial blooms)
+       instead of a linear band — light-brown (#864C2C) is still the
+       dominant tone, with navy as one small, contained accent bloom
+       rather than a stripe. Text flips to light cream. */
+    --background: radial-gradient(52% 62% at 14% 18%, #864c2c 0%, transparent 62%),
+      radial-gradient(48% 55% at 22% 88%, #6e3115 0%, transparent 60%),
+      radial-gradient(38% 42% at 88% 14%, #1e3653 0%, transparent 58%),
+      radial-gradient(55% 60% at 78% 92%, #6e3115 0%, transparent 62%),
+      #4f210d;
     --foreground: #f3e6d0;
   }
 }

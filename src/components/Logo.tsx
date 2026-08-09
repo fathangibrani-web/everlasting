@@ -37,8 +37,10 @@ export function Monogram({
 
 export default function Logo({
   variant = "navbar",
+  scrolled = false,
 }: {
   variant?: "navbar" | "footer" | "hero";
+  scrolled?: boolean;
 }) {
   if (variant === "hero") {
     return (
@@ -72,10 +74,18 @@ export default function Logo({
     <span className="flex items-center gap-2.5">
       <Monogram size={32} />
       <span className="flex flex-col leading-none">
-        <span className="font-display text-xl font-semibold tracking-tight text-[var(--foreground)]">
+        <span
+          className={`font-display text-xl font-semibold tracking-tight ${
+            scrolled ? "text-[var(--on-glass)]" : "text-[var(--foreground)]"
+          }`}
+        >
           Everlasting
         </span>
-        <span className="mt-0.5 text-[9px] font-medium uppercase tracking-[0.2em] text-brand-600">
+        <span
+          className={`mt-0.5 text-[9px] font-medium uppercase tracking-[0.2em] ${
+            scrolled ? "text-[var(--on-glass-accent)]" : "text-brand-600"
+          }`}
+        >
           Mindset &middot; Intelek &middot; Islami
         </span>
       </span>
