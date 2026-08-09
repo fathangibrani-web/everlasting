@@ -14,6 +14,7 @@ import { formatDate, getReadingTime } from "@/lib/format";
 import { SITE_URL } from "@/lib/site";
 import { urlForImage } from "@/sanity/lib/image";
 import {
+  allPostsQuery,
   postBySlugQuery,
   postSlugsQuery,
   postsByCategoryQuery,
@@ -94,7 +95,15 @@ export default async function ArticlePage({ params }: { params: Params }) {
   );
   const related = relatedAll.filter((p) => p._id !== post._id).slice(0, 4);
 
-  const nextReadPost: PostCard | null = post.nextRead ?? related[0] ?? null;
+  let nextReadPost: PostCard | null = post.nextRead ?? related[0] ?? null;
+
+  if (!nextReadPost) {
+    // No same-category article to suggest — fall back to the latest
+    // other post site-wide so "Baca Berikutnya" isn't left empty.
+    const latest = await safeFetch<PostCard[]>(allPostsQuery, {}, []);
+    nextReadPost = latest.find((p) => p._id !== post._id) ?? null;
+  }
+
   const relatedGrid = related
     .filter((p) => p._id !== nextReadPost?._id)
     .slice(0, 3);
