@@ -13,6 +13,10 @@ import { urlForImage } from "@/sanity/lib/image";
 import type { PostCard } from "@/sanity/lib/types";
 import type { MotionValue } from "motion/react";
 
+// Camera sits at this z and looks at the origin (react-three-fiber's default).
+// CardNode's distance-from-camera math below depends on this value.
+const CAMERA_Z = 5;
+
 function checkWebglSupport() {
   if (typeof document === "undefined") return true;
   try {
@@ -49,7 +53,7 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
     <div ref={containerRef} style={{ height: `${count * 100}vh` }} className="relative">
       <div className="gallery-gradient-bg sticky top-0 h-screen w-full overflow-hidden">
         <Canvas
-          camera={{ position: [0, 0, 5], fov: 50 }}
+          camera={{ position: [0, 0, CAMERA_Z], fov: 50 }}
           gl={{ alpha: true, antialias: true }}
           style={{ width: "100%", height: "100%" }}
         >
@@ -98,22 +102,48 @@ function CardNode({
     const progress = scrollYProgress.get();
     const local = (progress - start) / step;
 
-    const clamped = THREE.MathUtils.clamp(local, 0, 1);
-    const z = THREE.MathUtils.lerp(7, -4, clamped);
-    const centeredness = 1 - Math.min(Math.abs(local - 0.5) * 2, 1);
-    const x = direction * 2.4 * (1 - centeredness);
-    const rotY = direction * THREE.MathUtils.degToRad(20) * (1 - centeredness);
+    // How far into its entrance this card is: 0 = not reached yet, 1 = fully
+    // swung into its centered resting spot. It ramps up once and then holds
+    // — no more shrinking back down at the halfway point of its segment,
+    // which used to leave it prominent for only an instant.
+    const ENTER_RAMP = 0.2;
+    const centeredness = local <= 0 ? 0 : THREE.MathUtils.clamp(local / ENTER_RAMP, 0, 1);
+
+    // Distance from camera is kept well clear of zero at every step, so the
+    // card can never swell up or blur out from being scaled too close.
+    const CLOSEST = 5; // distance once fully entered and centered
+    const FARTHEST = 10; // distance while still entering
+    const activeDistance = THREE.MathUtils.lerp(FARTHEST, CLOSEST, centeredness);
+    const activeX = direction * 2.4 * (1 - centeredness);
+    const activeZ = CAMERA_Z - activeDistance;
+    const activeRotY = direction * THREE.MathUtils.degToRad(20) * (1 - centeredness);
+
+    // Once a card has held its centered spot for a while, ease it into a
+    // small "parked" slot in a row along the bottom instead of fading away —
+    // it stays there, visible and clickable, for the rest of the scroll.
+    const PARK_START = 0.7;
+    const PARK_DISTANCE = 8;
+    const PARK_SCALE = 0.5;
+    const parkT = THREE.MathUtils.clamp((local - PARK_START) / (1 - PARK_START), 0, 1);
+    const parkX = (index - (count - 1) / 2) * 1.3;
+    const parkY = -1.8;
+    const parkZ = CAMERA_Z - PARK_DISTANCE;
+
+    const x = THREE.MathUtils.lerp(activeX, parkX, parkT);
+    const y = THREE.MathUtils.lerp(0, parkY, parkT);
+    const z = THREE.MathUtils.lerp(activeZ, parkZ, parkT);
+    const rotY = THREE.MathUtils.lerp(activeRotY, 0, parkT);
+    const scale = THREE.MathUtils.lerp(1, PARK_SCALE, parkT);
 
     if (groupRef.current) {
-      groupRef.current.position.set(x, 0, z);
+      groupRef.current.position.set(x, y, z);
       groupRef.current.rotation.y = rotY;
+      groupRef.current.scale.setScalar(scale);
     }
 
-    let opacity = 1;
-    if (local < 0.15) opacity = THREE.MathUtils.clamp(local / 0.15, 0, 1);
-    else if (local > 0.85) opacity = THREE.MathUtils.clamp((1 - local) / 0.15, 0, 1);
-    if (local < 0 || local > 1) opacity = 0;
-
+    // Fades in once on entry, then stays fully visible (and clickable) for
+    // good — including once parked. It never fades back out.
+    const opacity = local <= 0 ? 0 : local < ENTER_RAMP ? local / ENTER_RAMP : 1;
     const blur = (1 - opacity) * 6;
 
     if (cardRef.current) {

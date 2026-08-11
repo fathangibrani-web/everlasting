@@ -195,7 +195,10 @@ body {
   text-align: center;
 }
 
-/* Moving gradient backdrop for the 3D article gallery hero. */
+/* Moving gradient backdrop for the 3D article gallery hero. Masked (not
+   just backgrounded) at the top edge so it fades into whatever sits above
+   — the hero text pre-scroll, the sticky navbar once pinned — instead of
+   cutting against it with a hard line. */
 .gallery-gradient-bg {
   background: linear-gradient(
     120deg,
@@ -208,6 +211,8 @@ body {
   );
   background-size: 300% 300%;
   animation: gallery-gradient-shift 22s ease-in-out infinite;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 6rem);
+  mask-image: linear-gradient(to bottom, transparent, black 6rem);
 }
 
 @keyframes gallery-gradient-shift {
