@@ -25,7 +25,7 @@ export default function AuthorHoverCard({
   const author = authorSlug ? authors.find((a) => a.slug === authorSlug) : undefined;
 
   const [open, setOpen] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0 });
+  const [coords, setCoords] = useState({ top: 0, left: 0, flip: false });
   const triggerRef = useRef<HTMLSpanElement>(null);
   const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -34,6 +34,7 @@ export default function AuthorHoverCard({
   if (!author) return <>{children}</>;
 
   const cardWidth = large ? 380 : 288;
+  const estimatedHeight = large ? 420 : 220;
   const photoSize = large ? "h-20 w-20" : "h-12 w-12";
   const photoPx = large ? 160 : 96;
 
@@ -47,12 +48,16 @@ export default function AuthorHoverCard({
     showTimer.current = setTimeout(() => {
       const rect = triggerRef.current?.getBoundingClientRect();
       if (rect) {
+        const fitsAbove = rect.top > estimatedHeight + 20;
         setCoords({
-          top: rect.bottom + window.scrollY + 8,
+          top: fitsAbove
+            ? rect.top + window.scrollY - 10
+            : rect.bottom + window.scrollY + 10,
           left: Math.min(
             Math.max(rect.left + window.scrollX, 12),
             window.innerWidth - cardWidth - 12
           ),
+          flip: !fitsAbove,
         });
       }
       setOpen(true);
@@ -74,35 +79,38 @@ export default function AuthorHoverCard({
       {children}
       {typeof document !== "undefined" &&
         createPortal(
-          <AnimatePresence>
-            {open && (
-              <motion.div
-                initial={
-                  shouldReduceMotion
-                    ? undefined
-                    : { opacity: 0, y: -6, scale: 0.97 }
-                }
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={
-                  shouldReduceMotion
-                    ? undefined
-                    : { opacity: 0, y: -6, scale: 0.97 }
-                }
-                transition={{
-                  duration: shouldReduceMotion ? 0 : 0.18,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                style={{
-                  position: "absolute",
-                  top: coords.top,
-                  left: coords.left,
-                  zIndex: 200,
-                  width: cardWidth,
-                }}
-                className={`glass-strong rounded-2xl border shadow-2xl ${large ? "p-6" : "p-4"}`}
-                onMouseEnter={clearTimers}
-                onMouseLeave={handleLeave}
-              >
+          <div
+            style={{
+              position: "absolute",
+              top: coords.top,
+              left: coords.left,
+              zIndex: 200,
+              width: cardWidth,
+              transform: coords.flip ? undefined : "translateY(-100%)",
+            }}
+          >
+            <AnimatePresence>
+              {open && (
+                <motion.div
+                  initial={
+                    shouldReduceMotion
+                      ? undefined
+                      : { opacity: 0, y: coords.flip ? -8 : 8, scale: 0.97 }
+                  }
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={
+                    shouldReduceMotion
+                      ? undefined
+                      : { opacity: 0, y: coords.flip ? -8 : 8, scale: 0.97 }
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0 : 0.22,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className={`glass-strong rounded-2xl border shadow-2xl ${large ? "p-6" : "p-4"} ${coords.flip ? "mt-2" : "mb-2"}`}
+                  onMouseEnter={clearTimers}
+                  onMouseLeave={handleLeave}
+                >
                 <div className="flex items-center gap-3">
                   {author.photo && (
                     <span
@@ -182,9 +190,10 @@ export default function AuthorHoverCard({
                     </ul>
                   </div>
                 )}
-              </motion.div>
-            )}
-          </AnimatePresence>,
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>,
           document.body
         )}
     </span>
