@@ -119,7 +119,7 @@ export default async function ProfilPage() {
             &rarr; Penulis.
           </p>
         ) : (
-          <StaggerGrid className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerGrid className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {authors.map((author) => (
               <StaggerItem key={author._id} className="h-full">
                 <AuthorHoverCard

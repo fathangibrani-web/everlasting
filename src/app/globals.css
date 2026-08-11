@@ -195,10 +195,14 @@ body {
   text-align: center;
 }
 
-/* Moving gradient backdrop for the 3D article gallery hero. Masked (not
-   just backgrounded) at the top edge so it fades into whatever sits above
-   — the hero text pre-scroll, the sticky navbar once pinned — instead of
-   cutting against it with a hard line. */
+/* Moving gradient backdrop for the 3D article gallery hero. Lives on its
+   own absolutely-positioned z-0 layer (see MorphHero.tsx) rather than as
+   the background of the section that also holds the heading/canvas/dots —
+   mask-image forces its own subtree into one composited group, so masking
+   the shared container would have faded the content on top of it too.
+   Masked at both edges so it fades into whatever sits next to it — the hero
+   text and sticky navbar above, the quotes section it un-sticks into below —
+   instead of cutting against either with a hard line. */
 .gallery-gradient-bg {
   background: linear-gradient(
     120deg,
@@ -211,8 +215,20 @@ body {
   );
   background-size: 300% 300%;
   animation: gallery-gradient-shift 22s ease-in-out infinite;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 6rem);
-  mask-image: linear-gradient(to bottom, transparent, black 6rem);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 6rem,
+    black calc(100% - 6rem),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 6rem,
+    black calc(100% - 6rem),
+    transparent
+  );
 }
 
 @keyframes gallery-gradient-shift {

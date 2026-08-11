@@ -29,7 +29,7 @@ export default function AuthorHoverCard({
   const author = authorSlug ? authors.find((a) => a.slug === authorSlug) : undefined;
 
   const [open, setOpen] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0, flip: false });
+  const [coords, setCoords] = useState({ top: 0, left: 0, maxHeight: 0 });
   const mounted = useSyncExternalStore(noopSubscribe, getClientSnapshot, getServerSnapshot);
   const triggerRef = useRef<HTMLSpanElement>(null);
   const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -39,7 +39,7 @@ export default function AuthorHoverCard({
   if (!author) return <>{children}</>;
 
   const cardWidth = large ? 380 : 288;
-  const estimatedHeight = large ? 420 : 220;
+  const minHeight = large ? 240 : 160;
   const photoSize = large ? "h-20 w-20" : "h-12 w-12";
   const photoPx = large ? 160 : 96;
 
@@ -53,16 +53,27 @@ export default function AuthorHoverCard({
     showTimer.current = setTimeout(() => {
       const rect = triggerRef.current?.getBoundingClientRect();
       if (rect) {
-        const fitsAbove = rect.top > estimatedHeight + 20;
+        const GAP = 10; // breathing room between card and trigger
+        const EDGE = 12; // keep clear of the viewport edge
+
+        // Always opens upwards. Its height is not guessed — it varies a lot
+        // with bio length and article count, and guessing low is what used
+        // to push the card off the top of the screen. Instead it is capped
+        // to the room actually available above the trigger and scrolls
+        // internally past that, so it is always fully on screen.
+        const maxHeight = Math.max(rect.top - GAP - EDGE, minHeight);
+        // The wrapper is translateY(-100%), so `top` is where the card's
+        // BOTTOM edge lands. Only in the cramped case where minHeight had to
+        // win does this push down far enough to overlap the trigger.
+        const bottomY = Math.max(rect.top - GAP, EDGE + maxHeight);
+
         setCoords({
-          top: fitsAbove
-            ? rect.top + window.scrollY - 10
-            : rect.bottom + window.scrollY + 10,
+          top: bottomY + window.scrollY,
           left: Math.min(
             Math.max(rect.left + window.scrollX, 12),
             window.innerWidth - cardWidth - 12
           ),
-          flip: !fitsAbove,
+          maxHeight,
         });
       }
       setOpen(true);
@@ -91,28 +102,25 @@ export default function AuthorHoverCard({
               left: coords.left,
               zIndex: 200,
               width: cardWidth,
-              transform: coords.flip ? undefined : "translateY(-100%)",
+              transform: "translateY(-100%)",
             }}
           >
             <AnimatePresence>
               {open && (
                 <motion.div
                   initial={
-                    shouldReduceMotion
-                      ? undefined
-                      : { opacity: 0, y: coords.flip ? -8 : 8, scale: 0.97 }
+                    shouldReduceMotion ? undefined : { opacity: 0, y: 8, scale: 0.97 }
                   }
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={
-                    shouldReduceMotion
-                      ? undefined
-                      : { opacity: 0, y: coords.flip ? -8 : 8, scale: 0.97 }
+                    shouldReduceMotion ? undefined : { opacity: 0, y: 8, scale: 0.97 }
                   }
                   transition={{
                     duration: shouldReduceMotion ? 0 : 0.22,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className={`glass-strong rounded-2xl border shadow-2xl ${large ? "p-6" : "p-4"} ${coords.flip ? "mt-2" : "mb-2"}`}
+                  style={{ maxHeight: coords.maxHeight }}
+                  className={`glass-strong mb-2 overflow-y-auto overscroll-contain rounded-2xl border shadow-2xl ${large ? "p-6" : "p-4"}`}
                   onMouseEnter={clearTimers}
                   onMouseLeave={handleLeave}
                 >

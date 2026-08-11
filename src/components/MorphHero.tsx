@@ -7,15 +7,30 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
+import Reveal from "@/components/Reveal";
 import { getColorClasses } from "@/lib/colors";
 import { capitalizeFirst } from "@/lib/format";
 import { urlForImage } from "@/sanity/lib/image";
 import type { PostCard } from "@/sanity/lib/types";
 import type { MotionValue } from "motion/react";
 
-// Camera sits at this z and looks at the origin (react-three-fiber's default).
-// CardNode's distance-from-camera math below depends on this value.
-const CAMERA_Z = 5;
+// The gallery renders through an ORTHOGRAPHIC camera, which applies no
+// perspective foreshortening at all — drei's <Html transform> leaves the
+// CSS `perspective` empty for one. That is what lets the cards sit in a row
+// without the off-centre ones skewing like a fanned-out deck, which is what
+// a perspective camera did to them.
+//
+// It also makes sizing exactly predictable instead of guesswork: <Html
+// transform> divides an object's scale by 400/distanceFactor (= 40 by
+// default) and then multiplies the whole layer by the camera's zoom. So at
+// zoom 40 a card renders at precisely its CSS pixel size, and one world
+// unit is precisely 40 screen pixels.
+const PX_PER_UNIT = 40;
+const CARD_WIDTH_PX = 300;
+const CARD_GAP_PX = 42;
+// Distance between the centres of two neighbouring slots, in world units.
+// Wider than a card, so cards in the row can never touch, let alone stack.
+const SLOT_SPACING = (CARD_WIDTH_PX + CARD_GAP_PX) / PX_PER_UNIT;
 
 function checkWebglSupport() {
   if (typeof document === "undefined") return true;
@@ -31,12 +46,62 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
   const shouldReduceMotion = useReducedMotion();
   const [webglOk] = useState(checkWebglSupport);
   const containerRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
+  // Drag state lives in refs, in world units, and is read straight from
+  // useFrame — a gesture never re-renders React mid-drag.
+  const dragOffset = useRef(0);
+  const gesture = useRef({ active: false, pointerX: 0, startOffset: 0, moved: false });
+
   const count = posts.length;
+  const maxDrag = Math.max(count - 1, 0) * SLOT_SPACING;
+
+  // Swallow the click that ends a drag, so letting go after a swipe doesn't
+  // also open an article. This has to be a native capture listener on the
+  // stage: drei's <Html> mounts its own React root on a descendant node, so
+  // a React onClickCapture here would not reliably beat that root's own
+  // handler, but DOM capture on an ancestor always does.
+  useEffect(() => {
+    const node = stageRef.current;
+    if (!node) return;
+    const swallowDragClick = (e: MouseEvent) => {
+      if (!gesture.current.moved) return;
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    node.addEventListener("click", swallowDragClick, true);
+    return () => node.removeEventListener("click", swallowDragClick, true);
+  }, [webglOk, shouldReduceMotion]);
+
+  const startDrag = (e: React.PointerEvent) => {
+    gesture.current = {
+      active: true,
+      pointerX: e.clientX,
+      startOffset: dragOffset.current,
+      moved: false,
+    };
+  };
+
+  const moveDrag = (e: React.PointerEvent) => {
+    const g = gesture.current;
+    if (!g.active) return;
+    const dxPx = e.clientX - g.pointerX;
+    if (Math.abs(dxPx) > 4) g.moved = true;
+    dragOffset.current = THREE.MathUtils.clamp(
+      g.startOffset + dxPx / PX_PER_UNIT,
+      -maxDrag,
+      maxDrag,
+    );
+  };
+
+  const endDrag = () => {
+    gesture.current.active = false;
+  };
+
   if (count === 0) return null;
 
   if (shouldReduceMotion || !webglOk) {
@@ -51,13 +116,39 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
 
   return (
     <div ref={containerRef} style={{ height: `${count * 100}vh` }} className="relative">
-      <div className="gallery-gradient-bg sticky top-0 h-screen w-full overflow-hidden">
+      <div
+        ref={stageRef}
+        onPointerDown={startDrag}
+        onPointerMove={moveDrag}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onPointerLeave={endDrag}
+        // pan-y keeps vertical page scrolling native while we take over
+        // horizontal dragging ourselves.
+        style={{ touchAction: "pan-y" }}
+        className="sticky top-0 h-screen w-full cursor-grab overflow-hidden active:cursor-grabbing"
+      >
+        {/* Animated backdrop lives on its own z-0 layer — separate from the
+            heading/canvas/dots above it — so its top-edge fade mask (see
+            .gallery-gradient-bg in globals.css) only softens the background,
+            never the content sitting on top of it. */}
+        <div className="gallery-gradient-bg absolute inset-0 z-0" />
+
+        <div className="pointer-events-none absolute inset-x-0 top-8 z-20 px-6 text-center sm:top-12">
+          <Reveal>
+            <h2 className="logo-shimmer-text mx-auto max-w-xs font-display text-xl font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] sm:max-w-xl sm:text-3xl md:max-w-2xl md:text-4xl">
+              Temukan jawaban dari masalah-masalahmu di tulisan-tulisan ini
+            </h2>
+          </Reveal>
+        </div>
+
         <Canvas
-          camera={{ position: [0, 0, CAMERA_Z], fov: 50 }}
+          className="relative z-10"
+          orthographic
+          camera={{ position: [0, 0, 10], zoom: PX_PER_UNIT }}
           gl={{ alpha: true, antialias: true }}
           style={{ width: "100%", height: "100%" }}
         >
-          <ambientLight intensity={1.2} />
           {posts.map((post, i) => (
             <CardNode
               key={post._id}
@@ -65,6 +156,7 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
               index={i}
               count={count}
               scrollYProgress={scrollYProgress}
+              dragOffset={dragOffset}
             />
           ))}
         </Canvas>
@@ -86,130 +178,90 @@ function CardNode({
   index,
   count,
   scrollYProgress,
+  dragOffset,
 }: {
   post: PostCard;
   index: number;
   count: number;
   scrollYProgress: MotionValue<number>;
+  dragOffset: React.RefObject<number>;
 }) {
   const groupRef = useRef<THREE.Group>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const step = 1 / count;
-  const start = index * step;
-  const direction = index % 2 === 0 ? 1 : -1;
 
   useFrame(() => {
-    const progress = scrollYProgress.get();
-    const local = (progress - start) / step;
+    // Every card owns one fixed slot in a single long row. Scrolling slides
+    // the whole row sideways rather than swapping cards in and out, so a
+    // card that has appeared simply stays put — always visible, always at
+    // full opacity, and never landing on top of a sibling. Dragging nudges
+    // the same row, which is why it shares one coordinate with scrolling.
+    const focus = THREE.MathUtils.clamp(
+      scrollYProgress.get() * (count - 1) - dragOffset.current / SLOT_SPACING,
+      0,
+      count - 1,
+    );
+    const slotsFromFocus = index - focus;
 
-    // How far into its entrance this card is: 0 = not reached yet, 1 = fully
-    // swung into its centered resting spot. It ramps up once and then holds
-    // — no more shrinking back down at the halfway point of its segment,
-    // which used to leave it prominent for only an instant.
-    const ENTER_RAMP = 0.2;
-    const centeredness = local <= 0 ? 0 : THREE.MathUtils.clamp(local / ENTER_RAMP, 0, 1);
-
-    // Distance from camera is kept well clear of zero at every step, so the
-    // card can never swell up or blur out from being scaled too close.
-    const CLOSEST = 5; // distance once fully entered and centered
-    const FARTHEST = 10; // distance while still entering
-    const activeDistance = THREE.MathUtils.lerp(FARTHEST, CLOSEST, centeredness);
-    const activeX = direction * 2.4 * (1 - centeredness);
-    const activeZ = CAMERA_Z - activeDistance;
-    const activeRotY = direction * THREE.MathUtils.degToRad(20) * (1 - centeredness);
-
-    // Once a card has held its centered spot for a while, ease it into a
-    // small "parked" slot in a row along the bottom instead of fading away —
-    // it stays there, visible and clickable, for the rest of the scroll.
-    const PARK_START = 0.7;
-    const PARK_DISTANCE = 8;
-    const PARK_SCALE = 0.5;
-    const parkT = THREE.MathUtils.clamp((local - PARK_START) / (1 - PARK_START), 0, 1);
-    const parkX = (index - (count - 1) / 2) * 1.3;
-    const parkY = -1.8;
-    const parkZ = CAMERA_Z - PARK_DISTANCE;
-
-    const x = THREE.MathUtils.lerp(activeX, parkX, parkT);
-    const y = THREE.MathUtils.lerp(0, parkY, parkT);
-    const z = THREE.MathUtils.lerp(activeZ, parkZ, parkT);
-    const rotY = THREE.MathUtils.lerp(activeRotY, 0, parkT);
-    const scale = THREE.MathUtils.lerp(1, PARK_SCALE, parkT);
+    // Gentle size emphasis on whichever card is centred. Deliberately small:
+    // even fully scaled up, a card stays narrower than SLOT_SPACING, so the
+    // emphasis can never close the gap to its neighbours.
+    const emphasis = 1 - Math.min(Math.abs(slotsFromFocus), 1);
 
     if (groupRef.current) {
-      groupRef.current.position.set(x, y, z);
-      groupRef.current.rotation.y = rotY;
-      groupRef.current.scale.setScalar(scale);
-    }
-
-    // Fades in once on entry, then stays fully visible (and clickable) for
-    // good — including once parked. It never fades back out.
-    const opacity = local <= 0 ? 0 : local < ENTER_RAMP ? local / ENTER_RAMP : 1;
-    const blur = (1 - opacity) * 6;
-
-    if (cardRef.current) {
-      cardRef.current.style.opacity = String(opacity);
-      cardRef.current.style.filter = blur > 0.1 ? `blur(${blur}px)` : "none";
-      cardRef.current.style.pointerEvents = opacity > 0.6 ? "auto" : "none";
+      groupRef.current.position.x = slotsFromFocus * SLOT_SPACING;
+      groupRef.current.scale.setScalar(0.86 + 0.14 * emphasis);
     }
   });
 
   const colors = getColorClasses(post.category?.color);
 
   return (
-    <group ref={groupRef} position={[0, 0, 7]}>
+    <group ref={groupRef}>
       <Html transform occlude={false} center>
-        <div
-          ref={cardRef}
-          style={{
-            opacity: index === 0 ? 1 : 0,
-            pointerEvents: index === 0 ? "auto" : "none",
-          }}
-          className="transition-[filter] duration-100"
+        <Link
+          href={`/artikel/${post.slug.current}`}
+          draggable={false}
+          style={{ width: CARD_WIDTH_PX }}
+          className="glass block overflow-hidden rounded-xl border shadow-2xl"
         >
-          <Link
-            href={`/artikel/${post.slug.current}`}
-            className="glass block w-[150px] overflow-hidden rounded-xl border shadow-2xl sm:w-[190px]"
-          >
-            {post.mainImage && (
-              <div className="relative aspect-[16/10] w-full overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={urlForImage(post.mainImage).width(760).height(475).url()}
-                  alt={post.mainImage.alt || post.title}
-                  className="h-full w-full object-cover"
-                  draggable={false}
-                />
-              </div>
-            )}
-            <div className="flex flex-col gap-1 p-2.5">
-              {post.category && (
-                <span
-                  className={`w-fit rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${colors.badge}`}
-                >
-                  {post.category.title}
-                </span>
-              )}
-              <h2 className="text-xs font-extrabold leading-tight text-[var(--on-glass)] sm:text-sm">
-                {post.title}
-              </h2>
-              {post.excerpt && (
-                <p className="line-clamp-2 text-[10px] text-[var(--on-glass-soft)]">
-                  {capitalizeFirst(post.excerpt)}
-                </p>
-              )}
-              <span className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--on-glass-accent)]">
-                Baca selengkapnya
-                <svg className="h-2.5 w-2.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fillRule="evenodd"
-                    d="M3 10a.75.75 0 01.75-.75h10.638L11.29 6.15a.75.75 0 111.08-1.04l4.5 4.5a.75.75 0 010 1.04l-4.5 4.5a.75.75 0 11-1.08-1.04l3.098-3.1H3.75A.75.75 0 013 10z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </span>
+          {post.mainImage && (
+            <div className="relative aspect-[16/10] w-full overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={urlForImage(post.mainImage).width(660).height(413).url()}
+                alt={post.mainImage.alt || post.title}
+                className="h-full w-full object-cover"
+                draggable={false}
+              />
             </div>
-          </Link>
-        </div>
+          )}
+          <div className="flex flex-col gap-2 p-4">
+            {post.category && (
+              <span
+                className={`w-fit rounded-full px-2.5 py-0.5 text-xs font-semibold ${colors.badge}`}
+              >
+                {post.category.title}
+              </span>
+            )}
+            <h2 className="text-base font-extrabold leading-tight text-[var(--on-glass)]">
+              {post.title}
+            </h2>
+            {post.excerpt && (
+              <p className="line-clamp-2 text-sm text-[var(--on-glass-soft)]">
+                {capitalizeFirst(post.excerpt)}
+              </p>
+            )}
+            <span className="mt-0.5 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--on-glass-accent)]">
+              Baca selengkapnya
+              <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M3 10a.75.75 0 01.75-.75h10.638L11.29 6.15a.75.75 0 111.08-1.04l4.5 4.5a.75.75 0 010 1.04l-4.5 4.5a.75.75 0 11-1.08-1.04l3.098-3.1H3.75A.75.75 0 013 10z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
+        </Link>
       </Html>
     </group>
   );
