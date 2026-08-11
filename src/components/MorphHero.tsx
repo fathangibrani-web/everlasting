@@ -1,13 +1,14 @@
 "use client";
 
 import { Html } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useReducedMotion, useScroll, useTransform } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import Reveal from "@/components/Reveal";
+import StaticHeroCards from "@/components/StaticHeroCards";
 import { getColorClasses } from "@/lib/colors";
 import { capitalizeFirst } from "@/lib/format";
 import { urlForImage } from "@/sanity/lib/image";
@@ -56,6 +57,9 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
   // useFrame — a gesture never re-renders React mid-drag.
   const dragOffset = useRef(0);
   const gesture = useRef({ active: false, pointerX: 0, startOffset: 0, moved: false });
+  // Set by FrameDriver once the canvas exists. The canvas is on-demand (see
+  // frameloop below), so anything that moves a card has to ask for a frame.
+  const invalidateRef = useRef<(() => void) | null>(null);
 
   const count = posts.length;
   const maxDrag = Math.max(count - 1, 0) * SLOT_SPACING;
@@ -96,6 +100,7 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
       -maxDrag,
       maxDrag,
     );
+    invalidateRef.current?.();
   };
 
   const endDrag = () => {
@@ -105,13 +110,7 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
   if (count === 0) return null;
 
   if (shouldReduceMotion || !webglOk) {
-    return (
-      <div className="mx-auto max-w-3xl space-y-4 px-4 sm:px-6">
-        {posts.map((post) => (
-          <StaticHeroCard key={post._id} post={post} />
-        ))}
-      </div>
-    );
+    return <StaticHeroCards posts={posts} />;
   }
 
   return (
@@ -146,9 +145,17 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
           className="relative z-10"
           orthographic
           camera={{ position: [0, 0, 10], zoom: PX_PER_UNIT }}
-          gl={{ alpha: true, antialias: true }}
+          // The scene holds no meshes at all — every card is DOM, drawn by
+          // <Html transform>; three.js is here only for the camera maths.
+          // So rendering on a 60fps loop just re-clears an empty buffer and
+          // re-runs every card's layout write forever. On demand, a frame
+          // happens only when scrolling or dragging actually moves something.
+          frameloop="demand"
+          dpr={[1, 1.5]}
+          gl={{ alpha: true, antialias: false }}
           style={{ width: "100%", height: "100%" }}
         >
+          <FrameDriver scrollYProgress={scrollYProgress} invalidateRef={invalidateRef} />
           {posts.map((post, i) => (
             <CardNode
               key={post._id}
@@ -171,6 +178,35 @@ export default function MorphHero({ posts }: { posts: PostCard[] }) {
       </div>
     </div>
   );
+}
+
+// Requests a render whenever the scroll position changes, and hands the
+// request function back out so the drag handler can do the same. Without
+// this an on-demand canvas would simply never repaint.
+function FrameDriver({
+  scrollYProgress,
+  invalidateRef,
+}: {
+  scrollYProgress: MotionValue<number>;
+  invalidateRef: React.RefObject<(() => void) | null>;
+}) {
+  const invalidate = useThree((s) => s.invalidate);
+
+  useEffect(() => {
+    invalidateRef.current = invalidate;
+    // Two frames on mount: the first lets <Html> attach its DOM, the second
+    // positions it once that DOM has been measured.
+    invalidate();
+    const raf = requestAnimationFrame(() => invalidate());
+    const unsubscribe = scrollYProgress.on("change", () => invalidate());
+    return () => {
+      cancelAnimationFrame(raf);
+      unsubscribe();
+      invalidateRef.current = null;
+    };
+  }, [invalidate, scrollYProgress, invalidateRef]);
+
+  return null;
 }
 
 function CardNode({
@@ -221,7 +257,7 @@ function CardNode({
           href={`/artikel/${post.slug.current}`}
           draggable={false}
           style={{ width: CARD_WIDTH_PX }}
-          className="glass block overflow-hidden rounded-xl border shadow-2xl"
+          className="glass-flat block overflow-hidden rounded-xl border shadow-2xl"
         >
           {post.mainImage && (
             <div className="relative aspect-[16/10] w-full overflow-hidden">
@@ -334,35 +370,5 @@ function ScrollHint({ scrollYProgress }: { scrollYProgress: MotionValue<number> 
         />
       </svg>
     </div>
-  );
-}
-
-function StaticHeroCard({ post }: { post: PostCard }) {
-  const colors = getColorClasses(post.category?.color);
-  return (
-    <Link
-      href={`/artikel/${post.slug.current}`}
-      className="glass group relative block aspect-[4/3] overflow-hidden rounded-3xl border shadow-sm"
-    >
-      {post.mainImage && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={urlForImage(post.mainImage).width(900).height(675).url()}
-          alt={post.mainImage.alt || post.title}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-      <div className="relative z-10 flex h-full flex-col justify-end p-6">
-        {post.category && (
-          <span
-            className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${colors.badge}`}
-          >
-            {post.category.title}
-          </span>
-        )}
-        <h2 className="mt-3 text-xl font-bold leading-snug text-white">{post.title}</h2>
-      </div>
-    </Link>
   );
 }

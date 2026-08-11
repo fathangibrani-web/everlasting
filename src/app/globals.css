@@ -204,17 +204,8 @@ body {
    text and sticky navbar above, the quotes section it un-sticks into below —
    instead of cutting against either with a hard line. */
 .gallery-gradient-bg {
-  background: linear-gradient(
-    120deg,
-    #f0d4bf,
-    #864c2c,
-    #a67623,
-    #1e3653,
-    #6e3115,
-    #f0d4bf
-  );
-  background-size: 300% 300%;
-  animation: gallery-gradient-shift 22s ease-in-out infinite;
+  overflow: hidden;
+  background: #6e3115;
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent,
@@ -231,20 +222,44 @@ body {
   );
 }
 
+/* The drifting colour lives on an oversized child that animates `transform`,
+   NOT on the element itself animating `background-position`. Only transform
+   runs on the compositor; animating background-position repaints this
+   full-screen layer on every frame, which was the single biggest source of
+   scroll jank on the home page. The child is 200% wide and offset -50% so
+   it still covers the viewport at both ends of its travel. */
+.gallery-gradient-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  background: linear-gradient(
+    120deg,
+    #f0d4bf,
+    #864c2c,
+    #a67623,
+    #1e3653,
+    #6e3115,
+    #f0d4bf
+  );
+  animation: gallery-gradient-shift 22s ease-in-out infinite;
+  will-change: transform;
+}
+
 @keyframes gallery-gradient-shift {
-  0% {
-    background-position: 0% 50%;
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    transform: translate3d(-25%, 0, 0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gallery-gradient-bg {
+  .gallery-gradient-bg::before {
     animation: none;
   }
 }
@@ -403,30 +418,30 @@ body {
 @keyframes aurora-float-1 {
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    transform: translate(8vw, 6vh) scale(1.15);
+    transform: translate3d(8vw, 6vh, 0) scale(1.15);
   }
 }
 
 @keyframes aurora-float-2 {
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    transform: translate(-6vw, -8vh) scale(1.1);
+    transform: translate3d(-6vw, -8vh, 0) scale(1.1);
   }
 }
 
 @keyframes aurora-float-3 {
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    transform: translate(-4vw, 5vh) scale(0.92);
+    transform: translate3d(-4vw, 5vh, 0) scale(0.92);
   }
 }
 
@@ -437,7 +452,11 @@ body {
 }
 
 /* Frosted-glass page base — sits above the decorative pattern so the
-   pattern reads softly through it, without touching any card/nav styling. */
+   pattern reads softly through it, without touching any card/nav styling.
+   NOTE: this full-page backdrop blur is the most expensive effect left on
+   the site — it is recomputed against the fixed background on every scroll
+   frame. It is kept deliberately, because dropping it visibly sharpens the
+   dot texture and wave lines and changes the site's whole look. */
 .frosted-base {
   background: rgba(240, 212, 191, 0.22);
   -webkit-backdrop-filter: blur(28px);
@@ -459,6 +478,21 @@ body {
   background: rgba(var(--card-rgb), 0.8);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   backdrop-filter: blur(20px) saturate(140%);
+  border-style: solid;
+  border-color: rgba(var(--border-rgb), 0.55);
+  box-shadow: 0 10px 30px -12px rgba(var(--glass-shadow-rgb), 0.4);
+  color: var(--on-glass);
+}
+
+/* Same surface as .glass — same tint, same 0.8 translucency, same edge —
+   only without the backdrop-filter. Use it on anything that is transformed
+   every frame, i.e. the gallery cards: a backdrop-filter there makes the
+   browser re-blur whatever sits behind the card on every single frame, five
+   cards over, which was the heaviest thing on the page. What shows through
+   these particular cards is the gallery's own smooth gradient, and blurring
+   a smooth gradient is a no-op to the eye, so the look survives intact. */
+.glass-flat {
+  background: rgba(var(--card-rgb), 0.8);
   border-style: solid;
   border-color: rgba(var(--border-rgb), 0.55);
   box-shadow: 0 10px 30px -12px rgba(var(--glass-shadow-rgb), 0.4);
