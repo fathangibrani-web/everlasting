@@ -138,7 +138,7 @@ function CardNode({
         >
           <Link
             href={`/artikel/${post.slug.current}`}
-            className="glass block w-[280px] overflow-hidden rounded-2xl border shadow-2xl sm:w-[360px]"
+            className="glass block w-[150px] overflow-hidden rounded-xl border shadow-2xl sm:w-[190px]"
           >
             {post.mainImage && (
               <div className="relative aspect-[16/10] w-full overflow-hidden">
@@ -151,25 +151,25 @@ function CardNode({
                 />
               </div>
             )}
-            <div className="flex flex-col gap-2 p-5">
+            <div className="flex flex-col gap-1 p-2.5">
               {post.category && (
                 <span
-                  className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${colors.badge}`}
+                  className={`w-fit rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${colors.badge}`}
                 >
                   {post.category.title}
                 </span>
               )}
-              <h2 className="text-lg font-extrabold leading-tight text-[var(--on-glass)] sm:text-xl">
+              <h2 className="text-xs font-extrabold leading-tight text-[var(--on-glass)] sm:text-sm">
                 {post.title}
               </h2>
               {post.excerpt && (
-                <p className="line-clamp-2 text-sm text-[var(--on-glass-soft)]">
+                <p className="line-clamp-2 text-[10px] text-[var(--on-glass-soft)]">
                   {capitalizeFirst(post.excerpt)}
                 </p>
               )}
-              <span className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--on-glass-accent)]">
+              <span className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--on-glass-accent)]">
                 Baca selengkapnya
-                <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="h-2.5 w-2.5" viewBox="0 0 20 20" fill="currentColor">
                   <path
                     fillRule="evenodd"
                     d="M3 10a.75.75 0 01.75-.75h10.638L11.29 6.15a.75.75 0 111.08-1.04l4.5 4.5a.75.75 0 010 1.04l-4.5 4.5a.75.75 0 11-1.08-1.04l3.098-3.1H3.75A.75.75 0 013 10z"
