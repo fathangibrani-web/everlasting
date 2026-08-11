@@ -3,12 +3,16 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 import { useAuthorsIndex } from "@/components/AuthorsIndexContext";
 import SocialIcon from "@/components/SocialIcon";
 import { urlForImage } from "@/sanity/lib/image";
+
+const noopSubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export default function AuthorHoverCard({
   authorSlug,
@@ -26,6 +30,7 @@ export default function AuthorHoverCard({
 
   const [open, setOpen] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0, flip: false });
+  const mounted = useSyncExternalStore(noopSubscribe, getClientSnapshot, getServerSnapshot);
   const triggerRef = useRef<HTMLSpanElement>(null);
   const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -77,7 +82,7 @@ export default function AuthorHoverCard({
       onMouseLeave={handleLeave}
     >
       {children}
-      {typeof document !== "undefined" &&
+      {mounted &&
         createPortal(
           <div
             style={{

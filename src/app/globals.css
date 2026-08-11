@@ -195,6 +195,39 @@ body {
   text-align: center;
 }
 
+/* Moving gradient backdrop for the 3D article gallery hero. */
+.gallery-gradient-bg {
+  background: linear-gradient(
+    120deg,
+    #f0d4bf,
+    #864c2c,
+    #a67623,
+    #1e3653,
+    #6e3115,
+    #f0d4bf
+  );
+  background-size: 300% 300%;
+  animation: gallery-gradient-shift 22s ease-in-out infinite;
+}
+
+@keyframes gallery-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-gradient-bg {
+    animation: none;
+  }
+}
+
 /* Page transitions (View Transitions API via React's <ViewTransition>) */
 ::view-transition-old(.page-exit) {
   animation: page-fade-out 150ms ease-in both;

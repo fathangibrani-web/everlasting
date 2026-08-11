@@ -4,7 +4,7 @@ import Link from "next/link";
 import ArticleCard from "@/components/ArticleCard";
 import AuthorHoverCard from "@/components/AuthorHoverCard";
 import { Monogram } from "@/components/Logo";
-import MorphHero from "@/components/MorphHero";
+import MorphHeroLoader from "@/components/MorphHeroLoader";
 import QuoteGrid from "@/components/QuoteGrid";
 import Reveal from "@/components/Reveal";
 import { StaggerGrid, StaggerItem } from "@/components/StaggerGrid";
@@ -62,7 +62,7 @@ export default async function Home() {
         </div>
       ) : (
         <>
-          <MorphHero posts={heroPosts} />
+          <MorphHeroLoader posts={heroPosts} />
 
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <Reveal className="pt-20">
